@@ -1,0 +1,521 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<andromdapp type="j2ee" root="$applicationParentDirectory/$applicationId">
+    <documentation>
+        <![CDATA[
+        <p>This wizard creates an AndroMDA powered J2EE application. An empty model is provided for your convenience.</p>
+        <p>You can select amongst the following additional features:</p>
+        <li><b>Persistence</b>: You can select the transaction/persistence framework that best suits your needs (EJB, EJB3, Spring, Hibernate)</li>
+        <li><b>Webservices</b>: Enable web services for your project and choose an appropriate web service framework</li>
+        <li><b>Web front-end</b>: If your project needs a web based user interface.</li>
+        ]]>
+    </documentation>
+    <resourceLocations>
+        <location>templates/j2ee/maven2</location>
+    </resourceLocations>
+    <conditionalOutput>
+        <conditions>
+            <condition id="ear" equal="true"/>
+            <output patterns="**/*">app/</output>
+        </conditions>
+        <conditions type="or">
+            <condition id="transactionPersistenceType" equal="ejb"/>
+            <condition id="transactionPersistenceType" equal="ejb3"/>
+            <output>core/META-INF/ejb-jar.xml</output>
+        </conditions>
+        <conditions type="or">
+            <condition id="transactionPersistenceType" notEqual="none"/>
+            <condition id="webserviceStack" equal="cxf"/>
+            <output patterns="**/*">core</output>
+        </conditions>
+        <conditions>
+            <condition id="web" equal="true"/>
+            <output patterns="**/*">web/</output>
+            <output>mda/src/main/config/mappings/WebMergeMappings.xml.vsl</output>
+            <output>web/src/main/resources/META-INF/context.xml.vsl</output>
+            <output>web/target/${applicationId}-${applicationVersion}/target/src/WEB-INF/web.xml</output>
+            <output>web/target/${applicationId}-web-${applicationVersion}/target/src/WEB-INF/web.xml</output>
+        </conditions>
+        <conditions type="and">
+            <condition id="webservice" notEqual="none"/>
+            <condition id="jsr181Webservice" notEqual="true"/>
+            <output patterns="**/*">webservice/</output>
+            <output>webservice/src/main/webapp/WEB-INF/web.xml</output>
+        </conditions>
+        <conditions type="and">
+            <condition id="webservice" notEqual="none"/>
+            <condition id="tomcat" equal="true"/>
+            <condition id="jsr181Webservice" notEqual="true"/>
+            <output>webservice/src/test/resources/META-INF/context.xml.vsl</output>
+        </conditions>
+        <conditions>
+            <condition id="webserviceStack" equal="cxf"/>
+            <output patterns="**/*">CXF/</output>
+        </conditions>
+        <conditions type="and">
+            <condition id="war" equal="true"/>
+            <condition id="webservice" notEqual="none"/>
+            <output>mda/src/main/config/mappings/WebMergeMappings.xml.vsl</output>
+        </conditions>
+        <conditions>
+            <condition id="spring" equal="true"/>
+            <output>mda/src/main/config/mappings/SpringMergeMappings.xml.vsl</output>
+        </conditions>
+        <conditions type="and">
+            <condition id="model" present="false"/>
+            <condition id="modelType" equal="uml1.4"/>
+            <output>mda/src/main/uml/${applicationId}.xmi.vsl</output>
+        </conditions>
+        <conditions type="and">
+            <condition id="model" present="false"/>
+            <condition id="modelType" equal="uml2"/>
+            <output>mda/src/main/uml/${applicationId}.xml.vsl</output>
+            <output>mda/src/main/uml/${applicationId}.mdr.vsl</output>
+        </conditions>
+        <conditions type="and">
+            <condition id="model" present="false"/>
+            <condition id="repositoryType" equal="emf-uml22"/>
+            <output>mda/src/main/uml/${applicationId}.uml.vsl</output>
+        </conditions>
+        <conditions type="and">
+            <condition id="model" present="false"/>
+            <condition id="repositoryType" equal="emf-uml22"/>
+            <output patterns="andromda-*-${andromda.version}.*.uml">mda/src/main/uml/</output>
+            <output patterns="*.di">mda/src/main/uml/</output>
+            <output patterns="*.notation">mda/src/main/uml/</output>
+        </conditions>
+        <conditions type="and">
+            <condition id="model" present="false"/>
+            <condition id="modelType" equal="rsm7"/>
+            <output>mda/src/main/uml/${applicationId}.emx.vsl</output>
+        </conditions>
+        <conditions>
+            <condition id="configurationUri" present="false"/>
+            <output>mda/src/main/config/andromda.xml</output>
+        </conditions>
+    </conditionalOutput>
+    <mappings>
+        <mapping>
+            <from>empty-model-uml14.xmi</from>
+            <to>${applicationId}.xmi.vsl</to>
+        </mapping>
+        <mapping>
+            <from>empty-model-uml2.xml</from>
+            <to>${applicationId}.xml.vsl</to>
+        </mapping>
+        <mapping>
+            <from>empty-model-uml2.mdr</from>
+            <to>${applicationId}.mdr.vsl</to>
+        </mapping>
+        <mapping>
+            <from>empty-model-rsm7.emx</from>
+            <to>${applicationId}.emx.vsl</to>
+        </mapping>
+        <mapping>
+            <from>empty-model.uml</from>
+            <to>${applicationId}.uml</to>
+        </mapping>
+        <mapping>
+            <from>empty-model.di</from>
+            <to>${applicationId}.di.vsl</to>
+        </mapping>
+        <mapping>
+            <from>mda/empty-model.notation.vsl</from>
+            <to>mda/src/main/uml/${applicationId}.notation.vsl</to>
+        </mapping>
+        <mapping>
+            <from>core/log4j.xml.vsl</from>
+            <to>core/src/main/resources/log4j.xml.vsl</to>
+        </mapping>
+        <mapping>
+            <from>app/src/main/config/jboss-datasource.xml.vsl</from>
+            <to>app/src/main/config/${applicationId}-ds.xml.vsl</to>
+        </mapping>
+        <mapping>
+            <from>ejb-jar.xml</from>
+            <to>target/classes/META-INF/ejb-jar.xml</to>
+        </mapping>
+        <mapping>
+            <from>web/web.xml</from>
+            <to>web/target/${applicationId}-${applicationVersion}/WEB-INF/web.xml</to>
+        </mapping>
+        <mapping>
+            <from>web/web.xml</from>
+            <to>web/target/${applicationId}-web-${applicationVersion}/WEB-INF/web.xml</to>
+        </mapping>
+        <mapping>
+            <from>web/context.xml.vsl</from>
+            <to>web/src/main/resources/META-INF/context.xml.vsl</to>
+        </mapping>
+        <mapping>
+            <from>web/context.xml.vsl</from>
+            <to>webservice/src/main/resources/META-INF/context.xml.vsl</to>
+        </mapping>
+        <mapping>
+            <from>web/context.xml.vsl</from>
+            <to>CXF/src/main/resources/META-INF/context.xml.vsl</to>
+        </mapping>
+        <mapping>
+            <from>webservice/web.xml</from>
+            <to>webservice/target/${applicationId}-webservice-${applicationVersion}/WEB-INF/web.xml</to>
+        </mapping>
+        <mapping>
+            <from>CXF/web.xml</from>
+            <to>CXF/target/${applicationId}-CXF-${applicationVersion}/WEB-INF/web.xml</to>
+        </mapping>
+    </mappings>
+    <instructions>readme.txt</instructions>
+    <templateEngine className="org.andromda.templateengines.velocity.VelocityTemplateEngine" extensions="vsl"/>
+    <templateObject name="stringUtils" className="org.apache.commons.lang.StringUtils"/>
+    <prompts>
+        <promptGroup name="Basic Project Information">
+            <documentation>
+                Provides the basic project information.
+            </documentation>
+            <prompt id="applicationParentDirectory">
+                <text>Please enter the parent directory of your new application directory (i.e. C:/Workspaces)</text>
+                <shortText>Application location</shortText>
+            </prompt>
+            <prompt id="author">
+                <text>Please enter your first and last name (i.e. Chad Brandon)</text>
+                <shortText>Author</shortText>
+            </prompt>
+            <prompt id="modelType" setResponseAsTrue="true">
+                <text>Which kind of modeling tool will you use?
+(uml1.4 or uml2 for .xml.zip/.xml/.xmi/.zargo files,
+emf-uml22 for .uml files, rsm7 for .emx files)</text>
+                <shortText>Model type</shortText>
+                <responses>
+                    <response>uml1.4</response>
+                    <response>uml2</response>
+                    <response>emf-uml22</response>
+                    <response>rsm7</response>
+                </responses>
+                <conditions>
+                    <condition equal="uml2">
+                        <setProperty id="repositoryType">emf-uml22</setProperty>
+                    </condition>
+                    <condition equal="emf-uml22">
+                        <setProperty id="repositoryType">emf-uml22</setProperty>
+                    </condition>
+                    <condition equal="uml1.4">
+                        <setProperty id="repositoryType">uml1.4</setProperty>
+                    </condition>
+                    <condition equal="rsm7">
+                        <setProperty id="repositoryType">emf-uml22</setProperty>
+                    </condition>
+                </conditions>
+            </prompt>
+            <prompt id="applicationName">
+                <text>Please enter the name (maven project description) of your J2EE project (i.e. Animal Quiz)</text>
+                <shortText>Application name</shortText>
+            </prompt>
+            <prompt id="applicationId">
+                <text>Please enter an id (maven artifactId) for your J2EE project (i.e. animalquiz)</text>
+                <shortText>Application ID</shortText>
+            </prompt>
+            <prompt id="applicationVersion">
+                <text>Please enter a version for your project (i.e. 1.0-SNAPSHOT)</text>
+                <shortText>Version</shortText>
+            </prompt>
+            <prompt id="applicationPackage">
+                <text>Please enter the root package name (maven groupId) for your J2EE project (i.e. org.andromda.samples.animalquiz)</text>
+                <shortText>Root package</shortText>
+            </prompt>
+            <prompt id="applicationType" setResponseAsTrue="true">
+                <text>Would you like an EAR or standalone WAR?</text>
+                <shortText>Application type</shortText>
+                <responses>
+                    <response>ear</response>
+                    <response>war</response>
+                </responses>
+            </prompt>
+        </promptGroup>
+        <promptGroup name="Component Types">
+            <documentation>
+                Provides the choice of components with the application.
+            </documentation>
+            <prompt id="transactionPersistenceType" setResponseAsTrue="true">
+                <text>Please enter the type of transactional/persistence cartridge to use (enter 'none' if you don't want to use one)</text>
+                <shortText>Persistence cartridge</shortText>
+                <preconditions>
+                    <condition id="applicationType" notEqual="war"/>
+                </preconditions>
+                <responses>
+                    <response>hibernate</response>
+                    <response>ejb</response>
+                    <response>ejb3</response>
+                    <response>spring</response>
+                    <response>none</response>
+                </responses>
+                <conditions>
+                    <condition equal="ejb3">
+                        <setProperty id="hibernate">false</setProperty>
+                        <setProperty id="spring">false</setProperty>
+                        <setProperty id="ejb">false</setProperty>
+                    </condition>
+                 </conditions>
+            </prompt>
+            <prompt id="transactionPersistenceType" setResponseAsTrue="true">
+                <text>Please enter the type of transactional/persistence cartridge to use (enter 'none' if you don't want to use one)</text>
+                <shortText>Persistence cartridge</shortText>
+                <preconditions>
+                    <condition id="applicationType" equal="war"/>
+                </preconditions>
+                <responses>
+                    <response>hibernate</response>
+                    <response>ejb3</response>
+                    <response>spring</response>
+                    <response>none</response>
+                </responses>
+            </prompt>
+            <!--prompt id="persistenceProviderExtensions" setResponseAsTrue="true">
+                <text>Please enter the persistence provider extensions to use (enter 'none' to use no framework-specific extensions)</text>
+                <shortText>Persistence Provider Extensions</shortText>
+                <preconditions>
+                    <condition id="transactionPersistenceType" equal="ejb3"/>
+                </preconditions>
+                <responses>
+                    <response>hibernate</response>
+                    <response>eclipseLink</response>
+                    <response>topLink</response>
+                    <response>openJpa</response>
+                    <response>kodoJpa</response>
+                    <response>none</response>
+                </responses>
+                <conditions>
+                    <condition equal="kodoJpa">
+                        <setProperty id="kodoJpaVersion">4</setProperty>
+                    </condition>
+                </conditions>
+            </prompt-->
+            <prompt id="implementationLanguage" setResponseAsTrue="true">
+                <text>Please enter the programming language to be used in service and dao implementations</text>
+                <shortText>Implementation language</shortText>
+                <preconditions>
+                    <condition id="transactionPersistenceType" equal="spring"/>
+                </preconditions>
+                <responses>
+                    <response>java</response>
+                    <response>groovy</response>
+                </responses>
+            </prompt>
+            <prompt id="databaseType" setResponseAsTrue="true">
+                <text>Please enter the database backend for the persistence layer</text>
+                <shortText>Database backend</shortText>
+                <preconditions>
+                    <condition id="transactionPersistenceType" notEqual="none"/>
+                </preconditions>
+                <responses>
+                    <response>h2</response>
+                    <response>hypersonic</response>
+                    <response>mysql</response>
+                    <response>oracle</response>
+                    <response>db2</response>
+                    <response>informix</response>
+                    <response>mssql</response>
+                    <response>pointbase</response>
+                    <response>postgres</response>
+                    <response>sybase</response>
+                    <response>sabdb</response>
+                    <response>progress</response>
+                    <response>derby</response>
+                    <response>javadb</response>
+                </responses>
+            </prompt>
+            <prompt id="testDatabase" setResponseAsTrue="true">
+                <text>Please enter the in-memory database to be used for unit and local integration testing</text>
+                <shortText>Test Database</shortText>
+                <preconditions type="and">
+                    <condition id="transactionPersistenceType" notEqual="none"/>
+                    <condition id="databaseType" notEqual="h2"/>
+                    <condition id="databaseType" notEqual="hypersonic"/>
+                    <condition id="databaseType" notEqual="derby"/>
+                    <condition id="databaseType" notEqual="javadb"/>
+                </preconditions>
+                <responses>
+                    <response>h2</response>
+                    <response>hypersonic</response>
+                    <response>derby</response>
+                    <response>mysql</response>
+                </responses>
+            </prompt>
+            <prompt id="web">
+                <text>Will your project have a web user interface?</text>
+                <shortText>Web interface</shortText>
+                <responses type="java.lang.Boolean">
+                    <response>yes</response>
+                    <response>no</response>
+                </responses>
+                <conditions>
+                    <condition equal="yes">
+                        <setProperty id="jsf">true</setProperty><!-- currently only JSF is supported -->
+                    </condition>
+                </conditions>
+            </prompt>
+            <prompt id="jbossSeam" setResponseAsTrue="false">
+                <text>Would you like to use the JBoss Seam application framework?</text>
+                <shortText>Enable JBoss Seam</shortText>
+                <preconditions>
+                    <condition id="transactionPersistenceType" equal="ejb3"/>
+                    <condition id="web" equal="true"/>
+                    <condition id="jsf" equal="true"/>
+                </preconditions>
+                <responses type="java.lang.Boolean">
+                    <response>yes</response>
+                    <response>no</response>
+                </responses>
+            </prompt>
+            <prompt id="webservice">
+                <text>What type of webservices would you like to be able to expose your services as?</text>
+                <shortText>Web services type</shortText>
+                <responses type="java.lang.String">
+                    <response>soap</response>
+                    <response>rest</response>
+                    <response>both</response>
+                    <response>none</response>
+                </responses>
+                <conditions>
+                    <condition equal="soap">
+                        <setProperty id="soap">true</setProperty>
+                    </condition>
+                    <condition equal="rest">
+                        <setProperty id="rest">true</setProperty>
+                    </condition>
+                    <condition equal="both">
+                        <setProperty id="soap">true</setProperty>
+                        <setProperty id="rest">true</setProperty>
+                    </condition>
+                    <condition equal="none">
+                        <setProperty id="soap">false</setProperty>
+                        <setProperty id="rest">false</setProperty>
+                    </condition>
+                 </conditions>
+            </prompt>
+            <prompt id="jsr181Webservice" setResponseAsTrue="false">
+                <text>Would you like to use the JSR181 (webservice defined by annotations) EJB3 cartridge specific implementation?</text>
+                <shortText>JSR181 compliant webservices</shortText>
+                <preconditions type="and">
+                    <condition id="webservice" notEqual="none"/>
+                    <condition id="transactionPersistenceType" equal="ejb3"/>
+                </preconditions>
+                <responses type="java.lang.Boolean">
+                    <response>yes</response>
+                    <response>no</response>
+                </responses>
+            </prompt>
+            <prompt id="webserviceStack"  setResponseAsTrue="true">
+                <text>Would you like to use Axis, XFire, CXF, or Sun's Jax-WS as your Webservice Stack?</text>
+                <shortText>SOAP stack</shortText>
+                <preconditions type="and">
+                    <condition id="webservice" notEqual="none"/>
+                    <condition id="jsr181Webservice" notEqual="true"/>
+                </preconditions>
+                <responses>
+                    <response>cxf</response>
+                    <response>axis</response>
+                    <response>jaxws</response>
+                    <response>xfire</response>
+                </responses>
+                <conditions>
+                    <condition id="webserviceStack" equal="cxf">
+                        <setProperty id="cxf">true</setProperty>
+                    </condition>
+                </conditions>
+            </prompt>
+            <prompt id="axisVersion">
+                <text>Would you like to use Axis 1.x or Axis 2.x (enter '1' for 1.x or '2' for 2.x)?</text>
+                <shortText>Axis version</shortText>
+                <preconditions>
+                    <condition id="webserviceStack" equal="axis"/>
+                </preconditions>
+                <responses>
+                    <response>1</response>
+                    <response>2</response>
+                </responses>
+            </prompt>
+            <prompt id="rest">
+                <text>What is your JAX-WS REST provider/consumer media type?
+(none for JAX-WS only, xml for JAX-RS only, or appxml, json, atom, plain, multipart, fastinfoset, yaml)</text>
+                <shortText>REST Media type</shortText>
+                <preconditions type="or">
+                    <condition id="webservice" equal="rest"/>
+                    <condition id="webservice" equal="both"/>
+                </preconditions>
+                <responses>
+                    <response>none</response>
+                    <response>xml</response>
+                    <response>appxml</response>
+                    <response>json</response>
+                    <response>atom</response>
+                    <response>plain</response>
+                    <response>fastinfoset</response>
+                    <response>yaml</response>
+                    <response>multipart</response>
+                </responses>
+            </prompt>
+            <prompt id="embeddedWebServer" setResponseAsTrue="true">
+                <text>Would you like to use an embedded web server (Maven plugin - enter 'none' if you don't want to use one)?</text>
+                <shortText>Use an embedded web server</shortText>
+                <preconditions type="or">
+                    <condition id="applicationType" equal="war"/>
+                    <condition id="webserviceStack" equal="cxf"/>
+                </preconditions>
+                <responses>
+                    <response>tomcat</response>
+                    <response>jetty</response>
+                    <response>none</response>
+                </responses>
+                <conditions>
+                    <condition equal="tomcat">
+                        <setProperty id="tomcat">true</setProperty>
+                    </condition>
+                    <condition equal="jetty">
+                        <setProperty id="jetty">true</setProperty>
+                    </condition>
+                 </conditions>
+            </prompt>
+            <!-- This determines dependency versions, which dependencies are bundled or provided, jee version, and which configuration files are created >
+            <prompt id="deploymentPlatform" setResponseAsTrue="true">
+                <text>What application deployment platform runtime/version do you want to use?</text>
+                <shortText>Application deployment runtime</shortText>
+                <preconditions type="and">
+                    <condition id="applicationType" notEqual="war"/>
+                    <condition id="webservice" notEqual="none"/>
+                </preconditions>
+                <responses>
+                    <response>wildfly8</response>
+                    <response>jboss7</response>
+                    <response>jboss6</response>
+                    <response>jboss51</response>
+                    <response>jboss5</response>
+                    <response>jboss42</response>
+                    <response>jboss4</response>
+                    <response>jboss3</response>
+                    <response>tomcat8</response>
+                    <response>tomcat7</response>
+                    <response>tomcat6</response>
+                    <response>was85</response>
+                    <response>was8</response>
+                    <response>was7</response>
+                    <response>was61</response>
+                    <response>liberty</response>
+                    <response>wasce2</response>
+                    <response>glassfish4</response>
+                    <response>glassfish3</response>
+                    <response>glassfish2</response>
+                    <response>weblogic12</response>
+                    <response>weblogic11</response>
+                    <response>weblogic10</response>
+                    <response>weblogic9</response>
+                    <response>weblogic8</response>
+                    <response>geronimo</response>
+                    <response>jonas5</response>
+                    <response>oracleas</response>
+                    <response>resin4</response>
+                    <response>resin3</response>
+                    <response>sun8</response>
+                </responses>
+            </prompt-->
+        </promptGroup>
+    </prompts>
+</andromdapp>

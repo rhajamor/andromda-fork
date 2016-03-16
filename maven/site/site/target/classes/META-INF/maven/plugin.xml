@@ -1,0 +1,557 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+  <name>AndroMDA Site Plugin</name>
+  <description>A plugin that enhances the maven site plugin to suit AndroMDA&apos;s modifications.
+        It creates the namespace and profile documentation, copy and unpack site artifacts.</description>
+  <groupId>org.andromda.maven.plugins.site</groupId>
+  <artifactId>andromda-site-plugin</artifactId>
+  <version>3.5-SNAPSHOT</version>
+  <goalPrefix>andromda-site</goalPrefix>
+  <isolatedRealm>false</isolatedRealm>
+  <inheritedByDefault>true</inheritedByDefault>
+  <mojos>
+    <mojo>
+      <goal>help</goal>
+      <description>Display help information on andromda-site-plugin.&lt;br/&gt; Call &lt;pre&gt;  mvn andromda-site:help -Ddetail=true -Dgoal=&amp;lt;goal-name&amp;gt;&lt;/pre&gt; to display parameter details.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>false</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <implementation>org.andromda.maven.plugin.site.HelpMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <threadSafe>true</threadSafe>
+      <parameters>
+        <parameter>
+          <name>detail</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>If &lt;code&gt;true&lt;/code&gt;, display all settable properties for each goal.</description>
+        </parameter>
+        <parameter>
+          <name>goal</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>The name of the goal for which to show help. If unspecified, all goals will be displayed.</description>
+        </parameter>
+        <parameter>
+          <name>indentSize</name>
+          <type>int</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>The number of spaces per indentation level, should be positive.</description>
+        </parameter>
+        <parameter>
+          <name>lineLength</name>
+          <type>int</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>The maximum length of a display line, should be positive.</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <detail implementation="boolean" default-value="false">${detail}</detail>
+        <goal implementation="java.lang.String">${goal}</goal>
+        <indentSize implementation="int" default-value="2">${indentSize}</indentSize>
+        <lineLength implementation="int" default-value="80">${lineLength}</lineLength>
+      </configuration>
+    </mojo>
+    <mojo>
+      <goal>copy-documentation</goal>
+      <description>Goal that copies the required AndroMDA site files to suitable locations preparing
+for deployment.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <phase>site</phase>
+      <implementation>org.andromda.maven.plugin.site.CopyDocumentationMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <threadSafe>false</threadSafe>
+      <parameters>
+        <parameter>
+          <name>animalQuizOutputDirectory</name>
+          <type>java.io.File</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Path to the destination directory to copy the animal-quiz model</description>
+        </parameter>
+        <parameter>
+          <name>animalQuizSourcePath</name>
+          <type>java.io.File</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Path to the animal-quiz model</description>
+        </parameter>
+        <parameter>
+          <name>carRentalSystemOutputDirectory</name>
+          <type>java.io.File</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Path to the destination directory to copy the car-rental-system model</description>
+        </parameter>
+        <parameter>
+          <name>carRentalSystemSourcePath</name>
+          <type>java.io.File</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Path to the car-rental-system model</description>
+        </parameter>
+        <parameter>
+          <name>documentationOutputDirectory</name>
+          <type>java.io.File</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>The documentation output directory used to copy the generated site reporting artifacts</description>
+        </parameter>
+        <parameter>
+          <name>documentationSourceDirectory</name>
+          <type>java.io.File</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>The directory containing the documentation site reporting artifacts</description>
+        </parameter>
+        <parameter>
+          <name>mappingsOutputDirectory</name>
+          <type>java.io.File</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Path to the mapping destination directory</description>
+        </parameter>
+        <parameter>
+          <name>mappingsSourceDirectory</name>
+          <type>java.io.File</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Path to the mapping source directory containing the mappings</description>
+        </parameter>
+        <parameter>
+          <name>project</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>projectName</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>The name of the project injected from pom.xml. Not used.</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <animalQuizOutputDirectory implementation="java.io.File">${project.reporting.outputDirectory}</animalQuizOutputDirectory>
+        <animalQuizSourcePath implementation="java.io.File">${basedir}/../samples/animal-quiz/mda/src/main/uml/AnimalQuiz.xml.zip</animalQuizSourcePath>
+        <carRentalSystemOutputDirectory implementation="java.io.File">${project.reporting.outputDirectory}</carRentalSystemOutputDirectory>
+        <carRentalSystemSourcePath implementation="java.io.File">${basedir}/../samples/car-rental-system/mda/src/main/uml/CarRentalSystem.xml.zip</carRentalSystemSourcePath>
+        <documentationOutputDirectory implementation="java.io.File">${project.reporting.outputDirectory}</documentationOutputDirectory>
+        <documentationSourceDirectory implementation="java.io.File">${project.reporting.outputDirectory}</documentationSourceDirectory>
+        <mappingsOutputDirectory implementation="java.io.File">${project.reporting.outputDirectory}/mappings</mappingsOutputDirectory>
+        <mappingsSourceDirectory implementation="java.io.File">${basedir}/../andromda-etc/mappings</mappingsSourceDirectory>
+        <project implementation="org.apache.maven.project.MavenProject">${project}</project>
+        <projectName implementation="java.lang.String" default-value="${project.name}"/>
+      </configuration>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.archiver.manager.ArchiverManager</role>
+          <field-name>archiverManager</field-name>
+        </requirement>
+      </requirements>
+    </mojo>
+    <mojo>
+      <goal>unpack-documentation</goal>
+      <description>Goal that unpacks the required AndroMDA site zip packages to suitable locations preparing
+for deployment.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <phase>site</phase>
+      <implementation>org.andromda.maven.plugin.site.UnpackDocumentationMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <threadSafe>false</threadSafe>
+      <parameters>
+        <parameter>
+          <name>jmiApiOutputDirectory</name>
+          <type>java.io.File</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Path to the JMI 1.4 API destination extraction directory</description>
+        </parameter>
+        <parameter>
+          <name>jmiApiSourcePath</name>
+          <type>java.io.File</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Path to the JMI 1.4 API zip source</description>
+        </parameter>
+        <parameter>
+          <name>project</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>projectName</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>The name of the project injected from pom.xml. Not used.</description>
+        </parameter>
+        <parameter>
+          <name>umlDocCarRentalSampleOutputDirectory</name>
+          <type>java.io.File</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Path to the UmlDoc car-rental-sample extraction directory</description>
+        </parameter>
+        <parameter>
+          <name>umlDocCarRentalSampleSourcePath</name>
+          <type>java.io.File</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Path to the UmlDoc car-rental-sample zip source</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <jmiApiOutputDirectory implementation="java.io.File">${basedir}/../../target/site</jmiApiOutputDirectory>
+        <jmiApiSourcePath implementation="java.io.File">${basedir}/src/site/resources/resources/jmi-uml1.4.zip</jmiApiSourcePath>
+        <project implementation="org.apache.maven.project.MavenProject">${project}</project>
+        <projectName implementation="java.lang.String" default-value="${project.name}"/>
+        <umlDocCarRentalSampleOutputDirectory implementation="java.io.File">${basedir}/../../target/site</umlDocCarRentalSampleOutputDirectory>
+        <umlDocCarRentalSampleSourcePath implementation="java.io.File">${basedir}/src/site/resources/resources/car-rental-umldoc.zip</umlDocCarRentalSampleSourcePath>
+      </configuration>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.archiver.manager.ArchiverManager</role>
+          <field-name>archiverManager</field-name>
+        </requirement>
+      </requirements>
+    </mojo>
+    <mojo>
+      <goal>profile-xsl</goal>
+      <description>Used to perform the transformation of the profile XSL document to profile.xml xdoc format
+within the site plugin.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <phase>pre-site</phase>
+      <implementation>org.andromda.maven.plugin.site.ProfileTransformerMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <threadSafe>false</threadSafe>
+      <parameters>
+        <parameter>
+          <name>profileDocumentPath</name>
+          <type>java.io.File</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Path to the project profile.xml</description>
+        </parameter>
+        <parameter>
+          <name>profileOutputPath</name>
+          <type>java.io.File</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Path to the project profile document output</description>
+        </parameter>
+        <parameter>
+          <name>profileTransformationPath</name>
+          <type>java.io.File</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Not used.</description>
+        </parameter>
+        <parameter>
+          <name>project</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>projectName</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>The name of the project injected from pom.xml</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <profileDocumentPath implementation="java.io.File">${basedir}/src/main/resources/META-INF/andromda/profile.xml</profileDocumentPath>
+        <profileOutputPath implementation="java.io.File">${basedir}/src/site/xdoc/profile.xml</profileOutputPath>
+        <profileTransformationPath implementation="java.io.File">${basedir}/src/main/resources/META-INF/xsl/profile.xsl</profileTransformationPath>
+        <project implementation="org.apache.maven.project.MavenProject">${project}</project>
+        <projectName implementation="java.lang.String" default-value="${project.name}"/>
+      </configuration>
+    </mojo>
+    <mojo>
+      <goal>namespace-xsl</goal>
+      <description>Used to perform the transformation of the namespace XSL document to namespace.xml xdoc format
+within the site plugin.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <phase>pre-site</phase>
+      <implementation>org.andromda.maven.plugin.site.NamespaceTransformerMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <threadSafe>false</threadSafe>
+      <parameters>
+        <parameter>
+          <name>namespaceDocumentPath</name>
+          <type>java.io.File</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Path to the project namespace.xml</description>
+        </parameter>
+        <parameter>
+          <name>namespaceOutputPath</name>
+          <type>java.io.File</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Path to the project namespace document output</description>
+        </parameter>
+        <parameter>
+          <name>namespaceTransformationPath</name>
+          <type>java.io.File</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Not used</description>
+        </parameter>
+        <parameter>
+          <name>project</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>projectName</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>The name of the project injected from pom.xml</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <namespaceDocumentPath implementation="java.io.File">${basedir}/src/main/resources/META-INF/andromda/namespace.xml</namespaceDocumentPath>
+        <namespaceOutputPath implementation="java.io.File">${basedir}/src/site/xdoc/namespace.xml</namespaceOutputPath>
+        <namespaceTransformationPath implementation="java.io.File">${basedir}/src/main/resources/META-INF/xsl/namespace.xsl</namespaceTransformationPath>
+        <project implementation="org.apache.maven.project.MavenProject">${project}</project>
+        <projectName implementation="java.lang.String" default-value="${project.name}"/>
+      </configuration>
+    </mojo>
+  </mojos>
+  <dependencies>
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <type>jar</type>
+      <version>2.6</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <type>jar</type>
+      <version>2.4</version>
+    </dependency>
+    <dependency>
+      <groupId>dom4j</groupId>
+      <artifactId>dom4j</artifactId>
+      <type>jar</type>
+      <version>1.6.1</version>
+    </dependency>
+    <dependency>
+      <groupId>xml-apis</groupId>
+      <artifactId>xml-apis</artifactId>
+      <type>jar</type>
+      <version>1.4.01</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-plugin-api</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-project</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-settings</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-profile</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-model</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-artifact-manager</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-repository-metadata</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-provider-api</artifactId>
+      <type>jar</type>
+      <version>1.0-beta-6</version>
+    </dependency>
+    <dependency>
+      <groupId>backport-util-concurrent</groupId>
+      <artifactId>backport-util-concurrent</artifactId>
+      <type>jar</type>
+      <version>3.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-plugin-registry</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+      <type>jar</type>
+      <version>3.0.18</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-artifact</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-container-default</artifactId>
+      <type>jar</type>
+      <version>1.5.5</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-classworlds</artifactId>
+      <type>jar</type>
+      <version>2.2.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.xbean</groupId>
+      <artifactId>xbean-reflect</artifactId>
+      <type>jar</type>
+      <version>3.4</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging-api</artifactId>
+      <type>jar</type>
+      <version>1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.collections</groupId>
+      <artifactId>google-collections</artifactId>
+      <type>jar</type>
+      <version>1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-archiver</artifactId>
+      <type>jar</type>
+      <version>2.7</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-io</artifactId>
+      <type>jar</type>
+      <version>2.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-compress</artifactId>
+      <type>jar</type>
+      <version>1.9</version>
+    </dependency>
+    <dependency>
+      <groupId>org.andromda</groupId>
+      <artifactId>andromda-core</artifactId>
+      <type>jar</type>
+      <version>3.5-20140919.204818-9</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+      <type>jar</type>
+      <version>3.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-digester</groupId>
+      <artifactId>commons-digester</artifactId>
+      <type>jar</type>
+      <version>2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-beanutils</groupId>
+      <artifactId>commons-beanutils</artifactId>
+      <type>jar</type>
+      <version>1.9.2</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <type>jar</type>
+      <version>1.2</version>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <type>jar</type>
+      <version>1.2.17</version>
+    </dependency>
+    <dependency>
+      <groupId>de.plushnikov</groupId>
+      <artifactId>doctor-jim</artifactId>
+      <type>jar</type>
+      <version>1.0</version>
+    </dependency>
+  </dependencies>
+</plugin>

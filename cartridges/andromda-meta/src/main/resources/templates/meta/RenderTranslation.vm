@@ -1,0 +1,42 @@
+##
+##  This macro will render the approriate java validation code
+##
+##      o   $allconstraints: all constraints to be translated
+##
+#macro (renderTranslation $allconstraints)
+#foreach ($constraint in $allconstraints)
+#set ($constraintTranslation = $constraint.getTranslation("validation.Java"))
+#set ($constraintDocumentation = $constraint.getDocumentation("",-1,false))
+        try
+        {
+## - we need to replace the references of "this" with "this.THIS()" in order to validate the correct metafacade instance
+##  (since we're using delegate inheritance)
+            $stringUtils.replace($constraintTranslation, 'final Object contextElement = this;', 'final Object contextElement = this.THIS();
+           ')
+            if (!constraintValid)
+            {
+                validationMessages.add(
+                    new ModelValidationMessage(
+                        (org.andromda.core.metafacade.MetafacadeBase)contextElement ,
+                        "$metaUtils.getFullyQualifiedConstraintName($constraint)",
+                        "$escapeUtils.escapeJava($constraintDocumentation)"));
+            }
+        }
+## getCause returns Throwable, not Exception, so we have to catch Throwable
+        catch (Throwable th)
+        {
+            Throwable cause = th.getCause();
+## MethodInvocationException references itself for the cause.
+            int depth = 0; // Some throwables have infinite recursion
+            while (cause != null && depth < 7)
+            {
+                th = cause;
+                depth++;
+            }
+            logger.error("Error validating constraint '$metaUtils.getFullyQualifiedConstraintName($constraint)' ON "
+                + this.THIS().toString() + ": " + th.getMessage(), th);
+        }
+#set ($constraintDocumentation = false)## reset to make sure we do not reuse the documentation of previous constraints
+#end
+#set ($constraint = false)## reset to make sure we do not reuse the last constraint
+#end

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document xmlns="http://maven.apache.org/XDOC/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+    <properties>
+        <title>AndroMDApp Maven Plug-in Goals</title>
+      </properties>
+      <body>
+          <section name="Goals">
+            <table>
+                <tr>
+                    <th>Goal</th>
+                    <th>Description</th>    
+                </tr>
+                <tr>
+                    <td nowrap="nowrap">
+                        <a href="generate-mojo.html">andromdapp:generate</a>
+                    </td>
+                    <td>
+                        <p>
+                            Generates an AndroMDA Powered Maven J2EE application (standalone
+                            WAR or EAR). When you run this goal, you will be prompted to 
+                            enter some application values before your application 
+                            will be generated.
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td nowrap="nowrap">
+                        <a href="clean-structure-mojo.html">andromdapp:clean-structure</a>
+                    </td>
+                    <td>
+                        <p>
+                            Removes the an AndroMDApp generated application structure.
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td nowrap="nowrap">
+                        <a href="deploy-mojo.html">andromdapp:deploy</a>
+                    </td>
+                    <td>
+                        <p>
+                            Provides the deployment of applications to a given directory.
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td nowrap="nowrap">
+                        <a href="eclipse-mojo.html">andromdapp:eclipse</a>
+                    </td>
+                    <td>
+                        <p>
+                            Writes the necessary .classpath and .project files for a new
+                            eclipse application. Deprecated - use eclipse:eclipse instead.
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td nowrap="nowrap">
+                        <a href="help-mojo.html">andromdapp:help</a>
+                    </td>
+                    <td>
+                        <p>
+                            Goal help and parameters.
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td nowrap="nowrap">
+                        <a href="instrument-scripts-mojo.html">andromdapp:instrument-scripts</a>
+                    </td>
+                    <td>
+                        <p>
+                            Allows for the ScriptClassGenerator mojo to be invoked. on one or more given classes.
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td nowrap="nowrap">
+                        <a href="link-mojo.html">andromdapp:link</a>
+                    </td>
+                    <td>
+                        <p>
+                            Post processes a previously built ear and replaces any
+                            war artifacts with symbolic links and then symbolic links the ear
+                            to the deploy directory so that we don't have to redeploy an ear in
+                            order to make jsp changes.
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td nowrap="nowrap">
+                        <a href="schema-mojo.html">andromdapp:schema</a>
+                    </td>
+                    <td>
+                        <p>
+                            Provides the ability to drop database schemas.
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td nowrap="nowrap">
+                        <a href="undeploy-mojo.html">andromdapp:undeploy</a>
+                    </td>
+                    <td>
+                        <p>
+                            Provides the undeployment of applications from a given directory.
+                        </p>
+                    </td>
+                </tr>
+            </table>
+        </section>
+      </body>
+</document>

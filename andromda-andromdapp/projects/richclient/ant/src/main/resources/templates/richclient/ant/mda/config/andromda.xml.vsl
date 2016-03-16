@@ -1,0 +1,159 @@
+<andromda>
+    <properties>
+        <property name="modelValidation">true</property>
+        <property name="cartridgeFilter">${andromda.cartridgeFilter}</property>
+    </properties>
+    <server>
+        <host>localhost</host>
+        <port>4446</port>
+    </server>
+    <repositories>
+        <repository name="netBeansMDR">
+            <models>
+                <model>
+                    <uri>${andromda.model.uri}</uri>
+                    <moduleSearchLocations>
+                        <location patterns="**/*">${andromda.dist.dir}/andromda/org/andromda/profiles</location>
+                    </moduleSearchLocations>
+                </model>
+            </models>
+        </repository>
+    </repositories>
+    <mappingsSearchLocations>
+        <location patterns="**/*.xml">${andromda.mappings.dir}</location>
+    </mappingsSearchLocations>
+    <namespaces>
+        <namespace name="default">
+            <properties>
+                <property name="languageMappingsUri">Java</property>
+                <property name="wrapperMappingsUri">JavaWrapper</property>
+                <property name="sqlMappingsUri">${sql.mappings}</property>
+                <property name="jdbcMappingsUri">JDBC</property>
+                <property name="maxSqlNameLength">30</property>
+                <property name="foreignKeySuffix">_FK</property>
+                <property name="ejbJndiNamePrefix">${jndi.prefix}</property>
+                 <!-- these masking properties allow you to configure the way
+                      your model element names are generated -->
+                <property name="classifierNameMask">none</property>
+                <property name="operationNameMask">none</property>
+                <property name="roleNameMask">none</property>
+                <property name="enumerationNameMask">none</property>
+                <property name="enumerationLiteralNameMask">upperunderscore</property>
+                <property name="entityNameMask">none</property>
+                <property name="entityPropertyNameMask">none</property>
+                <property name="parameterNameMask">none</property>
+                <property name="hibernateVersion">3</property>
+
+                <property name="richClient">true</property>
+                <property name="configPropertyPrefix">${application.id}.</property>
+                <property name="toDoTag">TODO</property>
+#if ($enableSecurity == 'yes')
+                <property name="securityRealm">${application.id}</property>
+#end
+                <property name="mergeLocation">mda/src/custom</property>
+            </properties>
+        </namespace>
+        <namespace name="spring">
+            <properties>
+                <property name="dataSource">${dataSource}</property>
+                <property name="username">${dataSource.user}</property>
+                <property name="password">${dataSource.password}</property>
+                <property name="driver">${dataSource.driver.class}</property>
+                <property name="connectionUrl">${dataSource.url.prefix}/${dataSource.database.name}</property>
+                <property name="hibernateDialect">${hibernate.db.dialect}</property>
+                <property name="hibernateShowSql">${hibernate.db.showSql}</property>
+                <property name="hibernateUseQueryCache">false</property>
+                <property name="hibernateQueryUseNamedParameters">true</property>
+                <property name="sessionFactory">org.springframework.orm.hibernate3.LocalSessionFactoryBean</property>
+                <property name="localTransactionManager">org.springframework.orm.hibernate3.HibernateTransactionManager</property>
+                <property name="hibernateCacheProvider">org.hibernate.cache.EhCacheProvider</property>
+                <property name="hibernateQueryCacheFactory">org.hibernate.cache.StandardQueryCacheFactory</property>
+                <property name="hibernateInheritanceStrategy">${hibernate.inheritance.strategy}</property>
+                <property name="springTypesPackage">${spring.types.package}</property>
+                <property name="daos">${source.server.codeGen.dir.java}</property>
+                <property name="dao-impls">${source.server.impl.dir.java}</property>
+                <property name="spring-configuration">${source.server.codeGen.dir.config}/WEB-INF</property>
+                <property name="services">${source.common.codeGen.dir.java}</property>
+                <property name="service-impls">${source.server.impl.dir.java}</property>
+                <property name="service-interfaces">${source.common.codeGen.dir.java}</property>
+
+                <property name="serviceRemotingType">${remote.type}</property>
+                <property name="serviceRemoteServer">${remote.server}</property>
+                <property name="serviceRemotePort">${remote.port}</property>
+                <property name="serviceRemoteContext">${application.id}</property>
+                <property name="serviceRemoteUrlPattern">/services</property>
+
+                <property name="client">${source.client.codeGen.dir.java}</property>
+                <property name="client-config">${source.client.codeGen.dir.config}</property>
+                <property name="client-test">${source.client.testCode.dir.java}</property>
+                <property name="server">${source.server.codeGen.dir.java}</property>
+                <property name="server-impl">${source.server.impl.dir.java}</property>
+                <property name="server-config">${source.server.codeGen.dir.config}</property>
+                <property name="server-test">${source.server.testCode.dir.java}</property>
+                <property name="server-test-config">${source.server.testCode.dir.config}</property>
+
+#if ($enableSecurity == 'yes')
+                <property name="serviceSecurity">true</property>
+                <property name="clientHttpInvokerExecutor">org.springframework.security.remoting.httpinvoker.AuthenticationSimpleHttpInvokerRequestExecutor</property>
+                <property name="securityAuthenticationManager">${application.id}AuthenticationManager</property>
+#if ($securityImplementAuth == 'yes')
+                <property name="authenticationManagerImplClass">org.springframework.security.authentication.ProviderManager</property>
+                <property name="authenticationDaoBeanName">${application.id}UserDetailsService</property>
+                <property name="authenticationDaoImplClass">${application.package}.UserDetailsServiceImpl</property>
+                <property name="daoAuthenticationProviderBeanName">daoAuthenticationProvider</property>
+                <property name="daoAuthenticationProviderImplClass">org.springframework.security.authentication.dao.DaoAuthenticationProvider</property>
+                <property name="securityDaoUserCacheBeanName">userAuthenticationCache</property>
+                <property name="securityDaoUserCacheImplClass">org.springframework.security.core.userdetails.cache.EhCacheBasedUserCache</property>
+                <property name="securityUserCacheConfigLocation">default</property>
+                <property name="securityUserCacheName">${application.package}.userCache</property>
+
+                <!-- If you would like to enable password encoding, uncomment next two lines...
+                    <property name="passwordEncoderBeanName">userPasswordEncoder</property>
+                    <property name="passwordEncoderImplClass">org.springframework.security.authentication.encoding.Md5PasswordEncoder</property>
+                -->
+
+#end
+                <property name="externalPrincipalStoreClass">org.springframework.security.core.context.SecurityContextHolder</property>
+                <property name="externalPrincipalStoreGetter">getContext().getAuthentication()</property>
+                <property name="externalPrincipalStoreGetterType">org.springframework.security.core.Authentication</property>
+
+                <!-- Uncomment this line AFTER your first "mda" run...
+                    <property name="mergeMappingsUri">file:mda/src/custom/merge-mappings/SpringMergeMappings.xml</property>
+                -->
+
+#end
+                <property name="merge-mappings">mda/src/custom/merge-mappings</property>
+
+            </properties>
+        </namespace>
+
+        <namespace name="hibernate">
+            <properties>
+                <property name="hibernateTypeMappingsUri">Hibernate</property>
+                <property name="dataSource">${datasource}</property>
+                <property name="hibernateDialect">${hibernate.db.dialect}</property>
+                <property name="hibernateTransactionManagerLookup">${hibernate.transaction.manager.lookup}</property>
+                <property name="hibernateInheritanceStrategy">${hibernate.inheritance.strategy}</property>
+                <property name="hibernateShowSql">${hibernate.db.showSql}</property>
+                <property name="hibernateJdbcBatchSize">0</property>
+                <property name="defaultHibernateGeneratorClass">${hibernate.generatorClass}</property>
+                <property name="hibernateDefaultCascade">none</property>
+                <property name="entities">${source.server.codeGen.dir.java}</property>
+                <property name="entity-impls">${source.server.impl.dir.java}</property>
+                <property name="entity-mappings">${source.server.codeGen.dir.java}</property>
+                <property name="user-types">${source.server.codeGen.dir.java}</property>
+                <property name="customTypesPackage">${hibernate.customTypes.package}</property>
+                <property name="compositionDefinesEagerLoading">true</property>
+                <property name="configuration">${source.server.codeGen.dir.config}/WEB-INF</property>
+            </properties>
+        </namespace>
+
+        <namespace name="java">
+            <properties>
+                <property name="enumerations">${source.common.codeGen.dir.java}</property>
+                <property name="exceptions">${source.common.codeGen.dir.java}</property>
+                <property name="value-objects">${source.common.codeGen.dir.java}</property>
+            </properties>
+        </namespace>
+    </namespaces>
+</andromda>

@@ -1,0 +1,1062 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+  <name>AndroMDA Model Archiver Plugin</name>
+  <description>A Maven plugin used for archiving models of type .xml.zip, .xml, .uml2, .uml, .emx, .epx
+        (for example by calling the xml.zip goal you can create a versioned xml.zip artifact).</description>
+  <groupId>org.andromda.maven.plugins</groupId>
+  <artifactId>andromda-model-archiver-plugin</artifactId>
+  <version>3.5-SNAPSHOT</version>
+  <goalPrefix>andromda-model-archiver</goalPrefix>
+  <isolatedRealm>false</isolatedRealm>
+  <inheritedByDefault>true</inheritedByDefault>
+  <mojos>
+    <mojo>
+      <goal>profile.uml</goal>
+      <description>Builds archived model uml files.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <phase>package</phase>
+      <implementation>org.andromda.maven.plugin.modelarchiver.UmlProfileArchiverMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <threadSafe>false</threadSafe>
+      <parameters>
+        <parameter>
+          <name>finalName</name>
+          <alias>modelName</alias>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description>The name of the emx file to generate.</description>
+        </parameter>
+        <parameter>
+          <name>modelFilePattern</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description>The pattern of the model file(s) that should be versioned.</description>
+        </parameter>
+        <parameter>
+          <name>modelSourceDirectory</name>
+          <type>java.io.File</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Single directory that contains the model</description>
+        </parameter>
+        <parameter>
+          <name>outputDirectory</name>
+          <type>java.io.File</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The directory for the generated emx.</description>
+        </parameter>
+        <parameter>
+          <name>project</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description>The maven project.</description>
+        </parameter>
+        <parameter>
+          <name>replaceExtensions</name>
+          <type>boolean</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Whether or not to do replacement of embedded model HREF reference extensions.</description>
+        </parameter>
+        <parameter>
+          <name>replacementExtensions</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The extensions to search for when doing replacement of embedded model HREF references
+within the archived model file from non-versioned to versioned references.</description>
+        </parameter>
+        <parameter>
+          <name>workDirectory</name>
+          <type>java.io.File</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Directory that resources are copied to during the build.</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <finalName implementation="java.lang.String">${project.build.finalName}</finalName>
+        <modelFilePattern implementation="java.lang.String">.*(\.profile\.uml)</modelFilePattern>
+        <modelSourceDirectory implementation="java.io.File">${basedir}/src/main/uml</modelSourceDirectory>
+        <outputDirectory implementation="java.io.File">${project.build.outputDirectory}</outputDirectory>
+        <project implementation="org.apache.maven.project.MavenProject">${project}</project>
+        <replaceExtensions implementation="boolean">false</replaceExtensions>
+        <replacementExtensions implementation="java.lang.String">.profile.uml</replacementExtensions>
+        <workDirectory implementation="java.io.File">${project.build.directory}</workDirectory>
+      </configuration>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.archiver.manager.ArchiverManager</role>
+          <field-name>archiverManager</field-name>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.project.MavenProjectHelper</role>
+          <field-name>projectHelper</field-name>
+        </requirement>
+      </requirements>
+    </mojo>
+    <mojo>
+      <goal>xml</goal>
+      <description>Builds archived model xml files.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <phase>package</phase>
+      <implementation>org.andromda.maven.plugin.modelarchiver.XmlArchiverMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <threadSafe>false</threadSafe>
+      <parameters>
+        <parameter>
+          <name>finalName</name>
+          <alias>modelName</alias>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description>The name of the emx file to generate.</description>
+        </parameter>
+        <parameter>
+          <name>modelFilePattern</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description>The pattern of the model file(s) that should be versioned.</description>
+        </parameter>
+        <parameter>
+          <name>modelSourceDirectory</name>
+          <type>java.io.File</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Single directory that contains the model</description>
+        </parameter>
+        <parameter>
+          <name>outputDirectory</name>
+          <type>java.io.File</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The directory for the generated emx.</description>
+        </parameter>
+        <parameter>
+          <name>project</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description>The maven project.</description>
+        </parameter>
+        <parameter>
+          <name>replaceExtensions</name>
+          <type>boolean</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Whether or not to do replacement of embedded model HREF reference extensions.</description>
+        </parameter>
+        <parameter>
+          <name>workDirectory</name>
+          <type>java.io.File</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Directory that resources are copied to during the build.</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <finalName implementation="java.lang.String">${project.build.finalName}</finalName>
+        <modelFilePattern implementation="java.lang.String">.*(\.xml)</modelFilePattern>
+        <modelSourceDirectory implementation="java.io.File">${basedir}/src/main/uml</modelSourceDirectory>
+        <outputDirectory implementation="java.io.File">${project.build.outputDirectory}</outputDirectory>
+        <project implementation="org.apache.maven.project.MavenProject">${project}</project>
+        <replaceExtensions implementation="boolean">false</replaceExtensions>
+        <workDirectory implementation="java.io.File">${project.build.directory}</workDirectory>
+      </configuration>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.archiver.manager.ArchiverManager</role>
+          <field-name>archiverManager</field-name>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.project.MavenProjectHelper</role>
+          <field-name>projectHelper</field-name>
+        </requirement>
+      </requirements>
+    </mojo>
+    <mojo>
+      <goal>uml2</goal>
+      <description>Builds archived model uml2 files.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <phase>package</phase>
+      <implementation>org.andromda.maven.plugin.modelarchiver.Uml2ArchiverMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <threadSafe>false</threadSafe>
+      <parameters>
+        <parameter>
+          <name>finalName</name>
+          <alias>modelName</alias>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description>The name of the emx file to generate.</description>
+        </parameter>
+        <parameter>
+          <name>modelFilePattern</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description>The pattern of the model file(s) that should be versioned.</description>
+        </parameter>
+        <parameter>
+          <name>modelSourceDirectory</name>
+          <type>java.io.File</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Single directory that contains the model</description>
+        </parameter>
+        <parameter>
+          <name>outputDirectory</name>
+          <type>java.io.File</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The directory for the generated emx.</description>
+        </parameter>
+        <parameter>
+          <name>project</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description>The maven project.</description>
+        </parameter>
+        <parameter>
+          <name>replaceExtensions</name>
+          <type>boolean</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Whether or not to do replacement of embedded model HREF reference extensions.</description>
+        </parameter>
+        <parameter>
+          <name>replacementExtensions</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The extensions to search for when doing replacement of embedded model HREF references
+within the archived model file from non-versioned to versioned references.</description>
+        </parameter>
+        <parameter>
+          <name>workDirectory</name>
+          <type>java.io.File</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Directory that resources are copied to during the build.</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <finalName implementation="java.lang.String">${project.build.finalName}</finalName>
+        <modelFilePattern implementation="java.lang.String">.*(\.uml2)</modelFilePattern>
+        <modelSourceDirectory implementation="java.io.File">${basedir}/src/main/uml</modelSourceDirectory>
+        <outputDirectory implementation="java.io.File">${project.build.outputDirectory}</outputDirectory>
+        <project implementation="org.apache.maven.project.MavenProject">${project}</project>
+        <replaceExtensions implementation="boolean">false</replaceExtensions>
+        <replacementExtensions implementation="java.lang.String">.uml2</replacementExtensions>
+        <workDirectory implementation="java.io.File">${project.build.directory}</workDirectory>
+      </configuration>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.archiver.manager.ArchiverManager</role>
+          <field-name>archiverManager</field-name>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.project.MavenProjectHelper</role>
+          <field-name>projectHelper</field-name>
+        </requirement>
+      </requirements>
+    </mojo>
+    <mojo>
+      <goal>xml.zip</goal>
+      <description>Builds archived model xml.zip files.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <phase>package</phase>
+      <implementation>org.andromda.maven.plugin.modelarchiver.XmiZipArchiverMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <threadSafe>false</threadSafe>
+      <parameters>
+        <parameter>
+          <name>attachArtifact</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Whether or not the model should be attached as new artifact.</description>
+        </parameter>
+        <parameter>
+          <name>finalName</name>
+          <alias>modelName</alias>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description>The name of the emx file to generate.</description>
+        </parameter>
+        <parameter>
+          <name>modelArchivePattern</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description>The pattern of the archived model files that should be extracted
+before being re-created as versioned model archives.</description>
+        </parameter>
+        <parameter>
+          <name>modelFilePattern</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description>The pattern of the non-archived model file(s) that should be archived.</description>
+        </parameter>
+        <parameter>
+          <name>modelSourceDirectory</name>
+          <type>java.io.File</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Single directory that contains the model</description>
+        </parameter>
+        <parameter>
+          <name>outputDirectory</name>
+          <type>java.io.File</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The directory for the generated emx.</description>
+        </parameter>
+        <parameter>
+          <name>project</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description>The maven project.</description>
+        </parameter>
+        <parameter>
+          <name>replaceExtensions</name>
+          <type>boolean</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Whether or not to do replacement of embedded model HREF reference extensions.</description>
+        </parameter>
+        <parameter>
+          <name>replacementExtensions</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The extensions to search for when doing replacement of embedded model HREF references
+within the archived model file from non-versioned to versioned references.</description>
+        </parameter>
+        <parameter>
+          <name>workDirectory</name>
+          <type>java.io.File</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Directory that resources are copied to during the build.</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <attachArtifact implementation="boolean">false</attachArtifact>
+        <finalName implementation="java.lang.String">${project.build.finalName}</finalName>
+        <modelArchivePattern implementation="java.lang.String">.*(\.xml\.zip)</modelArchivePattern>
+        <modelFilePattern implementation="java.lang.String">.*(\.xml|\.xmi)</modelFilePattern>
+        <modelSourceDirectory implementation="java.io.File">${basedir}/src/main/uml</modelSourceDirectory>
+        <outputDirectory implementation="java.io.File">${project.build.outputDirectory}</outputDirectory>
+        <project implementation="org.apache.maven.project.MavenProject">${project}</project>
+        <replaceExtensions implementation="boolean">true</replaceExtensions>
+        <replacementExtensions implementation="java.lang.String">.xml,.xml.zip,.xmi</replacementExtensions>
+        <workDirectory implementation="java.io.File">${project.build.directory}</workDirectory>
+      </configuration>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.archiver.manager.ArchiverManager</role>
+          <field-name>archiverManager</field-name>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.project.MavenProjectHelper</role>
+          <field-name>projectHelper</field-name>
+        </requirement>
+      </requirements>
+    </mojo>
+    <mojo>
+      <goal>epx</goal>
+      <description>Builds archived model epx files.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <phase>package</phase>
+      <implementation>org.andromda.maven.plugin.modelarchiver.EpxArchiverMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <threadSafe>false</threadSafe>
+      <parameters>
+        <parameter>
+          <name>finalName</name>
+          <alias>modelName</alias>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description>The name of the emx file to generate.</description>
+        </parameter>
+        <parameter>
+          <name>modelFilePattern</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description>The pattern of the model file(s) that should be versioned.</description>
+        </parameter>
+        <parameter>
+          <name>modelSourceDirectory</name>
+          <type>java.io.File</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Single directory that contains the model</description>
+        </parameter>
+        <parameter>
+          <name>outputDirectory</name>
+          <type>java.io.File</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The directory for the generated emx.</description>
+        </parameter>
+        <parameter>
+          <name>project</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description>The maven project.</description>
+        </parameter>
+        <parameter>
+          <name>replaceExtensions</name>
+          <type>boolean</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Whether or not to do replacement of embedded model HREF reference extensions.</description>
+        </parameter>
+        <parameter>
+          <name>replacementExtensions</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The extensions to search for when doing replacement of embedded model HREF references
+within the archived model file from non-versioned to versioned references.</description>
+        </parameter>
+        <parameter>
+          <name>workDirectory</name>
+          <type>java.io.File</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Directory that resources are copied to during the build.</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <finalName implementation="java.lang.String">${project.build.finalName}</finalName>
+        <modelFilePattern implementation="java.lang.String">.*(\.epx)</modelFilePattern>
+        <modelSourceDirectory implementation="java.io.File">${basedir}/src/main/uml</modelSourceDirectory>
+        <outputDirectory implementation="java.io.File">${project.build.outputDirectory}</outputDirectory>
+        <project implementation="org.apache.maven.project.MavenProject">${project}</project>
+        <replaceExtensions implementation="boolean">false</replaceExtensions>
+        <replacementExtensions implementation="java.lang.String">.epx</replacementExtensions>
+        <workDirectory implementation="java.io.File">${project.build.directory}</workDirectory>
+      </configuration>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.archiver.manager.ArchiverManager</role>
+          <field-name>archiverManager</field-name>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.project.MavenProjectHelper</role>
+          <field-name>projectHelper</field-name>
+        </requirement>
+      </requirements>
+    </mojo>
+    <mojo>
+      <goal>library.uml</goal>
+      <description>Builds archived model uml files.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <phase>package</phase>
+      <implementation>org.andromda.maven.plugin.modelarchiver.UmlLibraryArchiverMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <threadSafe>false</threadSafe>
+      <parameters>
+        <parameter>
+          <name>finalName</name>
+          <alias>modelName</alias>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description>The name of the emx file to generate.</description>
+        </parameter>
+        <parameter>
+          <name>modelFilePattern</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description>The pattern of the model file(s) that should be versioned.</description>
+        </parameter>
+        <parameter>
+          <name>modelSourceDirectory</name>
+          <type>java.io.File</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Single directory that contains the model</description>
+        </parameter>
+        <parameter>
+          <name>outputDirectory</name>
+          <type>java.io.File</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The directory for the generated emx.</description>
+        </parameter>
+        <parameter>
+          <name>project</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description>The maven project.</description>
+        </parameter>
+        <parameter>
+          <name>replaceExtensions</name>
+          <type>boolean</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Whether or not to do replacement of embedded model HREF reference extensions.</description>
+        </parameter>
+        <parameter>
+          <name>replacementExtensions</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The extensions to search for when doing replacement of embedded model HREF references
+within the archived model file from non-versioned to versioned references.</description>
+        </parameter>
+        <parameter>
+          <name>workDirectory</name>
+          <type>java.io.File</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Directory that resources are copied to during the build.</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <finalName implementation="java.lang.String">${project.build.finalName}</finalName>
+        <modelFilePattern implementation="java.lang.String">.*(\.library\.uml)</modelFilePattern>
+        <modelSourceDirectory implementation="java.io.File">${basedir}/src/main/uml</modelSourceDirectory>
+        <outputDirectory implementation="java.io.File">${project.build.outputDirectory}</outputDirectory>
+        <project implementation="org.apache.maven.project.MavenProject">${project}</project>
+        <replaceExtensions implementation="boolean">false</replaceExtensions>
+        <replacementExtensions implementation="java.lang.String">.library.uml</replacementExtensions>
+        <workDirectory implementation="java.io.File">${project.build.directory}</workDirectory>
+      </configuration>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.archiver.manager.ArchiverManager</role>
+          <field-name>archiverManager</field-name>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.project.MavenProjectHelper</role>
+          <field-name>projectHelper</field-name>
+        </requirement>
+      </requirements>
+    </mojo>
+    <mojo>
+      <goal>emx</goal>
+      <description>Builds archived model emx files.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <phase>package</phase>
+      <implementation>org.andromda.maven.plugin.modelarchiver.EmxArchiverMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <threadSafe>false</threadSafe>
+      <parameters>
+        <parameter>
+          <name>finalName</name>
+          <alias>modelName</alias>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description>The name of the emx file to generate.</description>
+        </parameter>
+        <parameter>
+          <name>modelFilePattern</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description>The pattern of the model file(s) that should be versioned.</description>
+        </parameter>
+        <parameter>
+          <name>modelSourceDirectory</name>
+          <type>java.io.File</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Single directory that contains the model</description>
+        </parameter>
+        <parameter>
+          <name>outputDirectory</name>
+          <type>java.io.File</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The directory for the generated emx.</description>
+        </parameter>
+        <parameter>
+          <name>project</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description>The maven project.</description>
+        </parameter>
+        <parameter>
+          <name>replaceExtensions</name>
+          <type>boolean</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Whether or not to do replacement of embedded model HREF reference extensions.</description>
+        </parameter>
+        <parameter>
+          <name>replacementExtensions</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The extensions to search for when doing replacement of embedded model HREF references
+within the archived model file from non-versioned to versioned references.</description>
+        </parameter>
+        <parameter>
+          <name>workDirectory</name>
+          <type>java.io.File</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Directory that resources are copied to during the build.</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <finalName implementation="java.lang.String">${project.build.finalName}</finalName>
+        <modelFilePattern implementation="java.lang.String">.*(\.emx)</modelFilePattern>
+        <modelSourceDirectory implementation="java.io.File">${basedir}/src/main/uml</modelSourceDirectory>
+        <outputDirectory implementation="java.io.File">${project.build.outputDirectory}</outputDirectory>
+        <project implementation="org.apache.maven.project.MavenProject">${project}</project>
+        <replaceExtensions implementation="boolean">false</replaceExtensions>
+        <replacementExtensions implementation="java.lang.String">.emx</replacementExtensions>
+        <workDirectory implementation="java.io.File">${project.build.directory}</workDirectory>
+      </configuration>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.archiver.manager.ArchiverManager</role>
+          <field-name>archiverManager</field-name>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.project.MavenProjectHelper</role>
+          <field-name>projectHelper</field-name>
+        </requirement>
+      </requirements>
+    </mojo>
+    <mojo>
+      <goal>uml</goal>
+      <description>Builds archived model uml files.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <phase>package</phase>
+      <implementation>org.andromda.maven.plugin.modelarchiver.UmlArchiverMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <threadSafe>false</threadSafe>
+      <parameters>
+        <parameter>
+          <name>finalName</name>
+          <alias>modelName</alias>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description>The name of the emx file to generate.</description>
+        </parameter>
+        <parameter>
+          <name>modelFilePattern</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description>The pattern of the model file(s) that should be versioned.</description>
+        </parameter>
+        <parameter>
+          <name>modelSourceDirectory</name>
+          <type>java.io.File</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Single directory that contains the model</description>
+        </parameter>
+        <parameter>
+          <name>outputDirectory</name>
+          <type>java.io.File</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The directory for the generated emx.</description>
+        </parameter>
+        <parameter>
+          <name>project</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description>The maven project.</description>
+        </parameter>
+        <parameter>
+          <name>replaceExtensions</name>
+          <type>boolean</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Whether or not to do replacement of embedded model HREF reference extensions.</description>
+        </parameter>
+        <parameter>
+          <name>replacementExtensions</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The extensions to search for when doing replacement of embedded model HREF references
+within the archived model file from non-versioned to versioned references.</description>
+        </parameter>
+        <parameter>
+          <name>workDirectory</name>
+          <type>java.io.File</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Directory that resources are copied to during the build.</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <finalName implementation="java.lang.String">${project.build.finalName}</finalName>
+        <modelFilePattern implementation="java.lang.String">.*(\.uml)</modelFilePattern>
+        <modelSourceDirectory implementation="java.io.File">${basedir}/src/main/uml</modelSourceDirectory>
+        <outputDirectory implementation="java.io.File">${project.build.outputDirectory}</outputDirectory>
+        <project implementation="org.apache.maven.project.MavenProject">${project}</project>
+        <replaceExtensions implementation="boolean">false</replaceExtensions>
+        <replacementExtensions implementation="java.lang.String">.uml</replacementExtensions>
+        <workDirectory implementation="java.io.File">${project.build.directory}</workDirectory>
+      </configuration>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.archiver.manager.ArchiverManager</role>
+          <field-name>archiverManager</field-name>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.project.MavenProjectHelper</role>
+          <field-name>projectHelper</field-name>
+        </requirement>
+      </requirements>
+    </mojo>
+  </mojos>
+  <dependencies>
+    <dependency>
+      <groupId>xml-apis</groupId>
+      <artifactId>xml-apis</artifactId>
+      <type>jar</type>
+      <version>1.4.01</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+      <type>jar</type>
+      <version>3.0.18</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-container-default</artifactId>
+      <type>jar</type>
+      <version>1.5.5</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-classworlds</artifactId>
+      <type>jar</type>
+      <version>2.2.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.xbean</groupId>
+      <artifactId>xbean-reflect</artifactId>
+      <type>jar</type>
+      <version>3.4</version>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <type>jar</type>
+      <version>1.2.12</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging-api</artifactId>
+      <type>jar</type>
+      <version>1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.collections</groupId>
+      <artifactId>google-collections</artifactId>
+      <type>jar</type>
+      <version>1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-interactivity-api</artifactId>
+      <type>jar</type>
+      <version>1.0-alpha-6</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-component-api</artifactId>
+      <type>jar</type>
+      <version>1.0-alpha-16</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-io</artifactId>
+      <type>jar</type>
+      <version>2.2</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <type>jar</type>
+      <version>2.6</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <type>jar</type>
+      <version>2.4</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-plugin-api</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-project</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-settings</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-profile</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-model</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-artifact-manager</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-repository-metadata</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-provider-api</artifactId>
+      <type>jar</type>
+      <version>1.0-beta-6</version>
+    </dependency>
+    <dependency>
+      <groupId>backport-util-concurrent</groupId>
+      <artifactId>backport-util-concurrent</artifactId>
+      <type>jar</type>
+      <version>3.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-plugin-registry</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-interpolation</artifactId>
+      <type>jar</type>
+      <version>1.11</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-archiver</artifactId>
+      <type>jar</type>
+      <version>2.5</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-core</artifactId>
+      <type>jar</type>
+      <version>2.0.6</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-file</artifactId>
+      <type>jar</type>
+      <version>1.0-beta-2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-plugin-parameter-documenter</artifactId>
+      <type>jar</type>
+      <version>2.0.6</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-http-lightweight</artifactId>
+      <type>jar</type>
+      <version>1.0-beta-2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-http-shared</artifactId>
+      <type>jar</type>
+      <version>1.0-beta-2</version>
+    </dependency>
+    <dependency>
+      <groupId>jtidy</groupId>
+      <artifactId>jtidy</artifactId>
+      <type>jar</type>
+      <version>4aug2000r7-dev</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.reporting</groupId>
+      <artifactId>maven-reporting-api</artifactId>
+      <type>jar</type>
+      <version>2.0.6</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.doxia</groupId>
+      <artifactId>doxia-sink-api</artifactId>
+      <type>jar</type>
+      <version>1.0-alpha-7</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-error-diagnostics</artifactId>
+      <type>jar</type>
+      <version>2.0.6</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-cli</groupId>
+      <artifactId>commons-cli</artifactId>
+      <type>jar</type>
+      <version>1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-ssh-external</artifactId>
+      <type>jar</type>
+      <version>1.0-beta-2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-ssh-common</artifactId>
+      <type>jar</type>
+      <version>1.0-beta-2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-plugin-descriptor</artifactId>
+      <type>jar</type>
+      <version>2.0.6</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-monitor</artifactId>
+      <type>jar</type>
+      <version>2.0.6</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-ssh</artifactId>
+      <type>jar</type>
+      <version>1.0-beta-2</version>
+    </dependency>
+    <dependency>
+      <groupId>com.jcraft</groupId>
+      <artifactId>jsch</artifactId>
+      <type>jar</type>
+      <version>0.1.27</version>
+    </dependency>
+    <dependency>
+      <groupId>classworlds</groupId>
+      <artifactId>classworlds</artifactId>
+      <type>jar</type>
+      <version>1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-artifact</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-archiver</artifactId>
+      <type>jar</type>
+      <version>2.7</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-compress</artifactId>
+      <type>jar</type>
+      <version>1.9</version>
+    </dependency>
+  </dependencies>
+</plugin>

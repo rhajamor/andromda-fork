@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<document xmlns="http://maven.apache.org/XDOC/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+
+    <properties>
+        <title>Pictures</title>
+        <author email="wouter@andromda.org">Wouter Zoons</author>
+    </properties>
+
+    <body>
+
+        <section name="Pictures">
+            <p>
+                Chad, Wouter and Matthias after the first day of the OpenArchitecture
+                conference in Bonn, December 1st 2004.
+            </p>
+            <p>
+                <img src="images/chad-wouter-matthias.jpg" alt="images/chad-wouter-matthias.jpg"/>
+            </p>
+        </section>
+
+    </body>
+
+</document>

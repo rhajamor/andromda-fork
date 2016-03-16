@@ -1,0 +1,669 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>$applicationPackage</groupId>
+        <artifactId>$applicationId</artifactId>
+        <version>$applicationVersion</version>
+    </parent>
+    <artifactId>${applicationId}-core</artifactId>
+## Spring assumes EJB implementation
+#if ($ejb || $ejb3)
+    <packaging>ejb</packaging>
+#if ($ejb3)
+#set ($ejb=false)
+#end
+#set ($hibernate=false)
+#set ($spring=false)
+#else
+    <packaging>jar</packaging>
+#end
+    <name>${applicationName} Core Business Tier</name>
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>${applicationId}-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+#if ($spring || $hibernate)
+#if ($spring)
+        <dependency>
+            <groupId>org.andromda</groupId>
+            <artifactId>andromda-core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.andromda.translationlibraries</groupId>
+            <artifactId>andromda-ocl-translation-core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.andromda.translationlibraries</groupId>
+            <artifactId>andromda-ocl-validation-library</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+#if ($tomcat || $jetty)
+        <!-- Uncomment below if using JDBC or Test features>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+        </dependency-->
+        <!-- Uncomment below if using Test features>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+        </dependency-->
+#else
+        <!-- Uncomment below if using JDBC or Test features>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+        </dependency-->
+#end
+#if($groovy)
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all-minimal</artifactId>
+        </dependency>
+#end
+#end
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+#if ($ear)
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>cglib</groupId>
+                    <artifactId>cglib</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>javassist</groupId>
+                    <artifactId>javassist</artifactId>
+                </exclusion>
+            </exclusions>
+#end
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+        </dependency>
+        <!-- For JBoss AS6 and earlier: Avoid NoSuchMethodException: org.hibernate.validator.ClassValidator.<init> -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator-legacy</artifactId>
+            <version>4.0.2.GA</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.hibernate</groupId>
+                    <artifactId>hibernate-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.hibernate</groupId>
+                    <artifactId>hibernate-commons-annotations</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- validator-legacy forces an earlier version of annotations. Change scope if < JBoss6 -->
+        <dependency>
+            <groupId>org.hibernate.common</groupId>
+            <artifactId>hibernate-commons-annotations</artifactId>
+            <version>4.0.5.Final</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.hibernate</groupId>
+                    <artifactId>hibernate</artifactId>
+                </exclusion>
+                <!-- Use persistence api 2.0 instead of 1.0 -->
+                <exclusion>
+                    <groupId>javax.persistence</groupId>
+                    <artifactId>persistence-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.ehcache.internal</groupId>
+            <artifactId>ehcache-core</artifactId>
+        </dependency>
+#if ($cxf)
+        <!-- See (http://www.lumidant.com/blog/hibernate-asm-incompatibilities/, http://forum.andromda.org/viewtopic.php?t=5747)
+        for purpose of this fix, so that we can be compatible with the cxf webservices -->
+#end
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib-nodep</artifactId>
+#if (!$spring)
+            <version>3.1</version>
+#end
+        </dependency>
+#if (!$spring && $cxf)
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+        </dependency>
+#end
+#if ($cxf)
+        <!-- Uncomment out four below if using JMS>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jms</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>aopalliance</groupId>
+            <artifactId>aopalliance</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-pool</groupId>
+            <artifactId>commons-pool</artifactId>
+        </dependency-->
+#if (!$ejb)
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+#end
+#end
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+        </dependency>
+#end
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+        </dependency>
+#if ($spring || $hibernate)
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+        </dependency>
+#end
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+        </dependency>
+#if ($ejb3)
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.spec</groupId>
+            <artifactId>jboss-javaee-all-7.0</artifactId>
+        </dependency>
+#if ($hibernate)
+#if ($cxf)
+        <!-- See (http://www.lumidant.com/blog/hibernate-asm-incompatibilities/, http://forum.andromda.org/viewtopic.php?t=5747)
+        for purpose of this fix, so that we can be compatible with the cxf webservices -->
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib-nodep</artifactId>
+            <version>3.1</version>
+        </dependency>
+#end
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+#if ($cxf)
+            <exclusions>
+                <exclusion>
+                    <groupId>asm</groupId>
+                    <artifactId>asm</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>asm</groupId>
+                    <artifactId>asm-attrs</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>cglib</groupId>
+                    <artifactId>cglib</artifactId>
+                </exclusion>
+            </exclusions>
+#end
+        </dependency>
+        <dependency>
+            <groupId>net.sf.ehcache.internal</groupId>
+            <artifactId>ehcache-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+        </dependency>
+#end
+#end
+#if ($jbossSeam.equals("no"))
+#set ($jbossSeam=false)
+#end
+#if ($jbossSeam)
+        <dependency>
+            <groupId>org.jboss</groupId>
+            <artifactId>jboss-seam</artifactId>
+            <version>unknown</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/../app/target/src/resources/lib/jboss-seam.jar</systemPath>
+        </dependency>
+#end
+        <dependency>
+            <groupId>org.andromda</groupId>
+            <artifactId>andromda-script-wrappers</artifactId>
+            <scope>provided</scope>
+        </dependency>
+#if ($axis)
+        <dependency>
+            <groupId>wsdl4j</groupId>
+            <artifactId>wsdl4j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.activation</groupId>
+            <artifactId>activation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+        </dependency>
+#if ($axisVersion.equals("1"))
+        <dependency>
+            <groupId>axis</groupId>
+            <artifactId>axis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-discovery</groupId>
+            <artifactId>commons-discovery</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>axis</groupId>
+            <artifactId>axis-jaxrpc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>axis</groupId>
+            <artifactId>axis-saaj</artifactId>
+        </dependency>
+#else
+        <dependency>
+            <groupId>org.apache.axis2</groupId>
+            <artifactId>axis2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>annogen</groupId>
+            <artifactId>annogen</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.woden</groupId>
+            <artifactId>woden-impl-om</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ws.commons.axiom</groupId>
+            <artifactId>axiom-dom</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ws.commons.axiom</groupId>
+            <artifactId>axiom-impl</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ws.commons.axiom</groupId>
+            <artifactId>axiom-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>backport-util-concurrent</groupId>
+            <artifactId>backport-util-concurrent</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-httpclient</groupId>
+            <artifactId>commons-httpclient</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>httpcomponents-httpcore</groupId>
+            <artifactId>jakarta-httpcore</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.geronimo.specs</groupId>
+            <artifactId>geronimo-jms_1.1_spec</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ws.commons.neethi</groupId>
+            <artifactId>neethi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>stax</groupId>
+            <artifactId>stax-api</artifactId>
+        </dependency>
+#end
+#elseif ($xfire)
+        <dependency>
+            <groupId>org.codehaus.xfire</groupId>
+            <artifactId>xfire-all</artifactId>
+        </dependency>
+#elseif ($jaxws)
+        <dependency>
+            <groupId>org.glassfish.metro</groupId>
+            <artifactId>webservices-api</artifactId>
+            <version>2.3-b24</version>
+        </dependency>
+#elseif ($cxf)
+#if ($webservice.equals("soap") || $webservice.equals("both"))
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-frontend-jaxws</artifactId>
+        </dependency>
+#end
+#if($webservice.equals("rest") || $webservice.equals("both"))
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-frontend-jaxrs</artifactId>
+        </dependency>
+#end
+#if (!$spring && !$hibernate)
+        <!-- See (http://www.lumidant.com/blog/hibernate-asm-incompatibilities/, http://forum.andromda.org/viewtopic.php?t=5747)
+        for purpose of this fix, so that we can be compatible with the cxf webservices -->
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib-nodep</artifactId>
+            <version>3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+#if (!$ejb3)
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+        </dependency>
+#end
+#end
+#end
+#if ($ejb3)
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+        </dependency>
+#end
+#if ($mysql)
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+#elseif ($postgres)
+        <dependency>
+            <groupId>postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
+#elseif ($derby)
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derby</artifactId>
+        </dependency>
+#elseif ($h2)
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
+#elseif ($hypersonic)
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+        </dependency>
+#else
+        <!-- add the database jdbc dependency -->
+#end
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+            </plugin>
+#if ($spring || $hibernate)
+            <plugin>
+                <groupId>org.andromda.maven.plugins</groupId>
+                <artifactId>andromdapp-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>schema</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <jdbcDriver>${jdbc.driver}</jdbcDriver>
+                    <jdbcDriverJar>${jdbc.driver.jar}</jdbcDriverJar>
+                    <jdbcConnectionUrl>${jdbc.url}</jdbcConnectionUrl>
+                    <jdbcUsername>${jdbc.username}</jdbcUsername>
+                    <jdbcPassword>${jdbc.password}</jdbcPassword>
+                    <!-- set this to false if you don't want to execute
+                         the generated SQL scripts (creates and saves DDL under app/target/schema*.sql -->
+                    <executeScripts>true</executeScripts>
+                    <properties>
+                        <property>
+                            <name>mappingsLocation</name>
+                            <value>${project.basedir}/target/src</value>
+                        </property>
+                        <property>
+                            <name>mappingFileExtension</name>
+                            <value>hbm.xml</value>
+                        </property>
+                        <property>
+                            <name>createOutputPath</name>
+#if ($ear)
+                            <value>${project.basedir}/../app/target/schema-create.sql</value>
+#else
+                            <value>${project.basedir}/../web/target/schema-create.sql</value>
+#end
+                        </property>
+                        <property>
+                            <name>dropOutputPath</name>
+#if ($ear)
+                            <value>${project.basedir}/../app/target/schema-drop.sql</value>
+#else
+                            <value>${project.basedir}/../web/target/schema-drop.sql</value>
+#end
+                        </property>
+                    </properties>
+                    <!-- You might need to execute additional scripts, just uncomment and add
+                         them here:
+                    <scripts>
+                        <script>${project.basedir}/path/to/scripts/script1.sql</script>
+                        <script>${project.basedir}/path/to/scripts/script2.sql</script>
+                    </scripts>
+                    -->
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.hibernate</groupId>
+                        <artifactId>hibernate-core</artifactId>
+                        <version>${hibernate.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+#end
+#if ($ejb3)
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
+                    </suiteXmlFiles>
+                    <!-- This trick allows the JBoss EJB3StandaloneBootstrap to find and deploy our compiled EJBs!! -->
+                    <systemProperties>
+                        <property>
+                            <name>java.class.path</name>
+                            <value>target/classes</value>
+                        </property>
+                    </systemProperties>
+                </configuration>
+            </plugin>
+#end
+#if ($ejb || $ejb3)
+            <!-- Create the /target/classes dir in case we run a clean with an empty model - avoid ejb plugin build failure -->
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>${maven-antrun-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <configuration>
+                            <target>
+                                <mkdir dir="${project.basedir}/target/classes"/>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-ejb-plugin</artifactId>
+                <version>${maven-ejb-plugin.version}</version>
+                <configuration>
+#if ($ejb3)
+                    <ejbVersion>3.0</ejbVersion>
+#end
+                    <archive>
+                        <manifest>
+                          <addClasspath>true</addClasspath>
+                          <useUniqueVersions>false</useUniqueVersions>
+                          <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                          <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                        </manifest>
+                        <manifestEntries>
+                          <Implementation-Build>${maven.build.timestamp}</Implementation-Build>
+                          <url>${project.url}</url>
+                        </manifestEntries>
+                    </archive>
+                    <generateClient>true</generateClient>
+                    <excludes>
+                        <exclude>**/*.ref</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+#else
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+            </plugin>
+#end
+            <plugin>
+                <artifactId>maven-source-plugin</artifactId>
+            </plugin>
+        </plugins>
+        <resources>
+#if ($groovy)
+            <resource>
+                <directory>src/main/groovy</directory>
+                <filtering>false</filtering>
+            </resource>
+#end
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>target/src/main/java</directory>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>
+        </resources>
+#if ($ejb3 || $ejb || $cxf)
+        <testSourceDirectory>src/test/java</testSourceDirectory>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <includes>
+                    <include>**/*.*</include>
+                </includes>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </testResource>
+        </testResources>
+#end
+    </build>
+</project>

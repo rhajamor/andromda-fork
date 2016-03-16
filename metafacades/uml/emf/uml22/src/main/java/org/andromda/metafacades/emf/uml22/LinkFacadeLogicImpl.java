@@ -1,0 +1,32 @@
+package org.andromda.metafacades.emf.uml22;
+
+import java.util.Collection;
+import org.apache.commons.collections.CollectionUtils;
+
+/**
+ * MetafacadeLogic implementation for org.andromda.metafacades.uml.LinkFacade.
+ *
+ * @see org.andromda.metafacades.uml.LinkFacade
+ */
+public class LinkFacadeLogicImpl extends LinkFacadeLogic
+{
+    private static final long serialVersionUID = -3677987842769687470L;
+
+    /**
+     * @param metaObject
+     * @param context
+     */
+    public LinkFacadeLogicImpl(final LinkInstance metaObject, final String context)
+    {
+        super(metaObject, context);
+    }
+
+    /**
+     * @see org.andromda.metafacades.uml.LinkFacade#getLinkEnds()
+     */
+    @Override
+    protected Collection<LinkEnd> handleGetLinkEnds()
+    {
+        return CollectionUtils.collect(this.metaObject.getSlots(), UmlUtilities.ELEMENT_TRANSFORMER);
+    }
+}

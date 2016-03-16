@@ -1,0 +1,9 @@
+org/andromda/maven/plugin/modelarchiver/EmxArchiverMojo.class
+org/andromda/maven/plugin/modelarchiver/XmlArchiverMojo.class
+org/andromda/maven/plugin/modelarchiver/UmlArchiverMojo.class
+org/andromda/maven/plugin/modelarchiver/UmlLibraryArchiverMojo.class
+org/andromda/maven/plugin/modelarchiver/Uml2ArchiverMojo.class
+org/andromda/maven/plugin/modelarchiver/BaseArchiveMojo.class
+org/andromda/maven/plugin/modelarchiver/EpxArchiverMojo.class
+org/andromda/maven/plugin/modelarchiver/UmlProfileArchiverMojo.class
+org/andromda/maven/plugin/modelarchiver/XmiZipArchiverMojo.class

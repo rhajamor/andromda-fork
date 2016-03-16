@@ -1,0 +1,42 @@
+package org.andromda.metafacades.emf.uml22;
+
+import org.eclipse.uml2.uml.Include;
+
+/**
+ * MetafacadeLogic implementation for org.andromda.metafacades.uml.IncludeFacade.
+ *
+ * @see org.andromda.metafacades.uml.IncludeFacade
+ */
+public class IncludeFacadeLogicImpl
+    extends IncludeFacadeLogic
+{
+    private static final long serialVersionUID = 34L;
+    /**
+     * @param metaObject
+     * @param context
+     */
+    public IncludeFacadeLogicImpl(
+        final Include metaObject,
+        final String context)
+    {
+        super(metaObject, context);
+    }
+
+    /**
+     * @see org.andromda.metafacades.uml.IncludeFacade#getBase()
+     */
+    @Override
+    protected Object handleGetBase()
+    {
+        return this.metaObject.getIncludingCase();
+    }
+
+    /**
+     * @see org.andromda.metafacades.uml.IncludeFacade#getAddition()
+     */
+    @Override
+    protected Object handleGetAddition()
+    {
+        return this.metaObject.getAddition();
+    }
+}

@@ -1,0 +1,1284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+  <name>AndroMDA Application Generator Maven Plugin</name>
+  <description>A plugin for running AndroMDA&apos;s AndroMDApp application generator
+        to generate Maven2 AndroMDA powered applications.</description>
+  <groupId>org.andromda.maven.plugins</groupId>
+  <artifactId>andromdapp-maven-plugin</artifactId>
+  <version>3.5-SNAPSHOT</version>
+  <goalPrefix>andromdapp</goalPrefix>
+  <isolatedRealm>false</isolatedRealm>
+  <inheritedByDefault>true</inheritedByDefault>
+  <mojos>
+    <mojo>
+      <goal>instrument-scripts</goal>
+      <description>Allows for the {@link ScriptClassGenerator} mojo to be invoked.
+on one or more given classes.</description>
+      <requiresDependencyResolution>runtime</requiresDependencyResolution>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <phase>compile</phase>
+      <implementation>org.andromda.maven.plugin.andromdapp.ScriptClassGeneratorMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <threadSafe>false</threadSafe>
+      <parameters>
+        <parameter>
+          <name>localRepository</name>
+          <type>org.apache.maven.artifact.repository.ArtifactRepository</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>locations</name>
+          <type>org.andromda.maven.plugin.andromdapp.Location[]</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Defines the java files who&apos;s classes will be instrumented.</description>
+        </parameter>
+        <parameter>
+          <name>project</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>scriptWrapper</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Defines the fully qualified class name of the script wrapper implementation.</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <localRepository implementation="org.apache.maven.artifact.repository.ArtifactRepository">${localRepository}</localRepository>
+        <project implementation="org.apache.maven.project.MavenProject">${project}</project>
+      </configuration>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.artifact.factory.ArtifactFactory</role>
+          <field-name>factory</field-name>
+        </requirement>
+      </requirements>
+    </mojo>
+    <mojo>
+      <goal>schema</goal>
+      <description>Provides the ability to drop database schemas.</description>
+      <requiresDependencyResolution>runtime</requiresDependencyResolution>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <implementation>org.andromda.maven.plugin.andromdapp.SchemaMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <threadSafe>false</threadSafe>
+      <parameters>
+        <parameter>
+          <name>executeScripts</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Whether or not scripts should be executed (if this is set to false, they will
+only be generated, but not executed).</description>
+        </parameter>
+        <parameter>
+          <name>jdbcConnectionUrl</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The JDBC connection URL.</description>
+        </parameter>
+        <parameter>
+          <name>jdbcDriver</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The name of the JDBC driver class.</description>
+        </parameter>
+        <parameter>
+          <name>jdbcDriverJar</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The jar containing the JDBC driver.</description>
+        </parameter>
+        <parameter>
+          <name>jdbcPassword</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>The JDBC password for the database.</description>
+        </parameter>
+        <parameter>
+          <name>jdbcUsername</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The JDBC username for the database.</description>
+        </parameter>
+        <parameter>
+          <name>localRepository</name>
+          <type>org.apache.maven.artifact.repository.ArtifactRepository</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>pluginArtifacts</name>
+          <type>java.util.List</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>project</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>properties</name>
+          <type>java.util.Properties</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>The properties that can be passed to the schema task.</description>
+        </parameter>
+        <parameter>
+          <name>propertyFiles</name>
+          <type>java.lang.String[]</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Any property files that should be loaded into the schema properties.</description>
+        </parameter>
+        <parameter>
+          <name>scripts</name>
+          <type>java.util.List</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Defines the location(s) of any SQL scripts to be executed.</description>
+        </parameter>
+        <parameter>
+          <name>taskType</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The type of the create schema task to execute.</description>
+        </parameter>
+        <parameter>
+          <name>tasks</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>The schema task to execute (create, drop, update, validate)</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <executeScripts implementation="boolean">${executeScripts}</executeScripts>
+        <localRepository implementation="org.apache.maven.artifact.repository.ArtifactRepository">${localRepository}</localRepository>
+        <pluginArtifacts implementation="java.util.List">${plugin.artifacts}</pluginArtifacts>
+        <project implementation="org.apache.maven.project.MavenProject">${project}</project>
+        <taskType implementation="java.lang.String">hibernate</taskType>
+        <tasks implementation="java.lang.String">${tasks}</tasks>
+      </configuration>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.artifact.resolver.ArtifactResolver</role>
+          <field-name>artifactResolver</field-name>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.artifact.factory.ArtifactFactory</role>
+          <field-name>factory</field-name>
+        </requirement>
+      </requirements>
+    </mojo>
+    <mojo>
+      <goal>generate</goal>
+      <description>AndroMDA application generator Mojo.</description>
+      <requiresDependencyResolution>runtime</requiresDependencyResolution>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>false</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <implementation>org.andromda.maven.plugin.andromdapp.AndroMDAppMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <threadSafe>false</threadSafe>
+      <parameters>
+        <parameter>
+          <name>configurationUri</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>The URI to an optional AndroMDApp configuration file.</description>
+        </parameter>
+        <parameter>
+          <name>project</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>propertyFiles</name>
+          <type>java.util.List</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>settings</name>
+          <type>org.apache.maven.settings.Settings</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description>The current user system settings for use in Maven. (allows us to pass the user
+settings to the AndroMDA configuration).</description>
+        </parameter>
+        <parameter>
+          <name>skip</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Set this to &apos;true&apos; to bypass cartridge tests entirely. Its use is NOT RECOMMENDED, but quite convenient on occasion.</description>
+        </parameter>
+        <parameter>
+          <name>skipProcessing</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Whether or not processing should be skipped (this is if you want to completely skip code generation, i.e. if
+code is already generated and you are creating the site from already generated source code).</description>
+        </parameter>
+        <parameter>
+          <name>skipTests</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Set this to &apos;true&apos; to skip running tests, but still compile them. Its use is NOT RECOMMENDED, but quite convenient on occasion.</description>
+        </parameter>
+        <parameter>
+          <name>testFailureIgnore</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Set this to true to ignore a failure during testing. Its use is NOT RECOMMENDED, but quite convenient on occasion.</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <configurationUri implementation="java.lang.String">${configuration.uri}</configurationUri>
+        <project implementation="org.apache.maven.project.MavenProject">${project}</project>
+        <propertyFiles implementation="java.util.List">${project.build.filters}</propertyFiles>
+        <settings implementation="org.apache.maven.settings.Settings">${settings}</settings>
+        <skip implementation="boolean">${maven.test.skip}</skip>
+        <skipProcessing implementation="boolean">${andromdapp.run.skip}</skipProcessing>
+        <skipTests implementation="boolean">${skipTests}</skipTests>
+        <testFailureIgnore implementation="boolean" default-value="false">${maven.test.failure.ignore}</testFailureIgnore>
+      </configuration>
+    </mojo>
+    <mojo>
+      <goal>deploy</goal>
+      <description>Provides the deployment of applications to a given directory.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <phase>package</phase>
+      <implementation>org.andromda.maven.plugin.andromdapp.DeployMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <threadSafe>false</threadSafe>
+      <parameters>
+        <parameter>
+          <name>deploy</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Indicates whether or not this plugin should perform the deploy.</description>
+        </parameter>
+        <parameter>
+          <name>deployLocation</name>
+          <type>java.io.File</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The location (i.e. path) to deploy.</description>
+        </parameter>
+        <parameter>
+          <name>excludes</name>
+          <type>java.lang.String[]</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Any files to exclude in the deploy.</description>
+        </parameter>
+        <parameter>
+          <name>includes</name>
+          <type>java.lang.String[]</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Any additional files to include in the deploy liked datasource files etc
+(the files must reside in the project build directory).
+By default nothing besides the file artifact is deployed.</description>
+        </parameter>
+        <parameter>
+          <name>project</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description></description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <deploy implementation="java.lang.String">${deploy}</deploy>
+        <project implementation="org.apache.maven.project.MavenProject">${project}</project>
+      </configuration>
+    </mojo>
+    <mojo>
+      <goal>build</goal>
+      <description>A Mojo used for executing the build goals from the top level project.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <implementation>org.andromda.maven.plugin.andromdapp.BuildMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <threadSafe>false</threadSafe>
+      <parameters>
+        <parameter>
+          <name>baseDirectory</name>
+          <type>java.io.File</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>environmentVariablePrefix</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>The prefix environment variables must have.</description>
+        </parameter>
+        <parameter>
+          <name>executionProperties</name>
+          <type>java.util.Properties</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Any execution properties.</description>
+        </parameter>
+        <parameter>
+          <name>goals</name>
+          <type>java.util.List</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>The default module goals to execute.</description>
+        </parameter>
+        <parameter>
+          <name>modules</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>A comma separated list of modules to execute in the form:
+&lt;em&gt;-Dmodules=mda,core,common&lt;/em&gt; or if you want to specify the goals
+to execute as well:
+&lt;em&gt;-Dmodules=mda:[goal1+goal2+goal3],core:[goal1]&lt;em&gt;.</description>
+        </parameter>
+        <parameter>
+          <name>project</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>session</name>
+          <type>org.apache.maven.execution.MavenSession</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>startConsole</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>If defined starts the build console (i.e. keeps maven loaded and running)</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <baseDirectory implementation="java.io.File">${project.basedir}</baseDirectory>
+        <environmentVariablePrefix implementation="java.lang.String">env.</environmentVariablePrefix>
+        <modules implementation="java.lang.String">${modules}</modules>
+        <project implementation="org.apache.maven.project.MavenProject">${project}</project>
+        <session implementation="org.apache.maven.execution.MavenSession">${session}</session>
+        <startConsole implementation="java.lang.String">${console}</startConsole>
+      </configuration>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.lifecycle.LifecycleExecutor</role>
+          <field-name>lifecycleExecutor</field-name>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.project.MavenProjectBuilder</role>
+          <field-name>projectBuilder</field-name>
+        </requirement>
+      </requirements>
+    </mojo>
+    <mojo>
+      <goal>eclipse</goal>
+      <description>Writes the necessary .classpath and .project files
+for a new eclipse application.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <phase>generate-sources</phase>
+      <implementation>org.andromda.maven.plugin.andromdapp.EclipseMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <threadSafe>false</threadSafe>
+      <parameters>
+        <parameter>
+          <name>classpathArtifactTypes</name>
+          <type>java.util.Set</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>The artifact types which should be included in the generated Eclipse classpath.</description>
+        </parameter>
+        <parameter>
+          <name>classpathMerge</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Allows non-generated configuration to be &quot;merged&quot; into the generated .classpath file.</description>
+        </parameter>
+        <parameter>
+          <name>excludePoms</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Defines the POMs to exclude when generating the eclipse files.</description>
+        </parameter>
+        <parameter>
+          <name>excludes</name>
+          <type>java.lang.String[]</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Defines the POMs to exclude when generating the eclipse files.</description>
+        </parameter>
+        <parameter>
+          <name>includes</name>
+          <type>java.lang.String[]</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Defines the POMs to include when generating the eclipse files.</description>
+        </parameter>
+        <parameter>
+          <name>localRepository</name>
+          <type>org.apache.maven.artifact.repository.ArtifactRepository</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>project</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>repositoryVariableName</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>The name of the variable that will store the maven repository location.</description>
+        </parameter>
+        <parameter>
+          <name>resolveTransitiveDependencies</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Whether or not transitive dependencies shall be included in any resources (i.e. .classpath
+that are generated by this mojo).</description>
+        </parameter>
+        <parameter>
+          <name>session</name>
+          <type>org.apache.maven.execution.MavenSession</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>skipProcessing</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Whether or not processing should be skipped (this is if you just want to force AndroMDA
+not to run on your model).</description>
+        </parameter>
+        <parameter>
+          <name>variables</name>
+          <type>org.andromda.maven.plugin.andromdapp.eclipse.Variable[]</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description></description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <excludePoms implementation="java.lang.String">${exclude.poms}</excludePoms>
+        <localRepository implementation="org.apache.maven.artifact.repository.ArtifactRepository">${localRepository}</localRepository>
+        <project implementation="org.apache.maven.project.MavenProject">${project}</project>
+        <repositoryVariableName implementation="java.lang.String">${repository.variable.name}</repositoryVariableName>
+        <resolveTransitiveDependencies implementation="boolean">${resolveTransitiveDependencies}</resolveTransitiveDependencies>
+        <session implementation="org.apache.maven.execution.MavenSession">${session}</session>
+        <skipProcessing implementation="boolean">${andromda.run.skip}</skipProcessing>
+      </configuration>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.artifact.factory.ArtifactFactory</role>
+          <field-name>artifactFactory</field-name>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.artifact.metadata.ArtifactMetadataSource</role>
+          <field-name>artifactMetadataSource</field-name>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.artifact.resolver.ArtifactResolver</role>
+          <field-name>artifactResolver</field-name>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.project.MavenProjectBuilder</role>
+          <field-name>projectBuilder</field-name>
+        </requirement>
+      </requirements>
+    </mojo>
+    <mojo>
+      <goal>link</goal>
+      <description>Basically post processes a previously built ear and replaces any war
+artifacts with symbolic links and then symbolic links the ear to the deploy
+directory so that we don&apos;t have to redeploy an ear in order to make jsp changes.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <phase>package</phase>
+      <implementation>org.andromda.maven.plugin.andromdapp.SymbolicLinkExplodedEarMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <threadSafe>false</threadSafe>
+      <parameters>
+        <parameter>
+          <name>deployLocation</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>The location in which to link the exploded ear.</description>
+        </parameter>
+        <parameter>
+          <name>project</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description>The maven project.</description>
+        </parameter>
+        <parameter>
+          <name>rootProjectLimit</name>
+          <type>int</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>The number of levels allowed to travel up before we get to the &quot;root project&quot; (i.e. this
+will prevent the system from attempting to get parent project that aren&apos;t really
+part of the direct project).</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <deployLocation implementation="java.lang.String">${env.JBOSS_HOME}/server/default/deploy</deployLocation>
+        <project implementation="org.apache.maven.project.MavenProject">${project}</project>
+        <rootProjectLimit implementation="int">1</rootProjectLimit>
+      </configuration>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.artifact.factory.ArtifactFactory</role>
+          <field-name>artifactFactory</field-name>
+        </requirement>
+      </requirements>
+    </mojo>
+    <mojo>
+      <goal>undeploy</goal>
+      <description>Provides the undeployment of applications from a given directory.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <implementation>org.andromda.maven.plugin.andromdapp.UndeployMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <threadSafe>false</threadSafe>
+      <parameters>
+        <parameter>
+          <name>deployLocation</name>
+          <type>java.io.File</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The location (i.e. path) to deploy.</description>
+        </parameter>
+        <parameter>
+          <name>project</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description></description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <project implementation="org.apache.maven.project.MavenProject">${project}</project>
+      </configuration>
+    </mojo>
+    <mojo>
+      <goal>help</goal>
+      <description>Display help information on andromdapp-maven-plugin.&lt;br/&gt; Call &lt;pre&gt;  mvn andromdapp:help -Ddetail=true -Dgoal=&amp;lt;goal-name&amp;gt;&lt;/pre&gt; to display parameter details.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>false</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <implementation>org.andromda.maven.plugin.andromdapp.HelpMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <threadSafe>true</threadSafe>
+      <parameters>
+        <parameter>
+          <name>detail</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>If &lt;code&gt;true&lt;/code&gt;, display all settable properties for each goal.</description>
+        </parameter>
+        <parameter>
+          <name>goal</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>The name of the goal for which to show help. If unspecified, all goals will be displayed.</description>
+        </parameter>
+        <parameter>
+          <name>indentSize</name>
+          <type>int</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>The number of spaces per indentation level, should be positive.</description>
+        </parameter>
+        <parameter>
+          <name>lineLength</name>
+          <type>int</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>The maximum length of a display line, should be positive.</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <detail implementation="boolean" default-value="false">${detail}</detail>
+        <goal implementation="java.lang.String">${goal}</goal>
+        <indentSize implementation="int" default-value="2">${indentSize}</indentSize>
+        <lineLength implementation="int" default-value="80">${lineLength}</lineLength>
+      </configuration>
+    </mojo>
+    <mojo>
+      <goal>clean-structure</goal>
+      <description>Removes the an AndroMDApp generated application structure.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>false</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <implementation>org.andromda.maven.plugin.andromdapp.AndroMDAppCleanMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <threadSafe>false</threadSafe>
+      <parameters>
+        <parameter>
+          <name>configurationUri</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>The URI to an optional AndroMDApp configuration file.</description>
+        </parameter>
+        <parameter>
+          <name>project</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>propertyFiles</name>
+          <type>java.util.List</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>settings</name>
+          <type>org.apache.maven.settings.Settings</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description>The current user system settings for use in Maven. (allows us to pass the user
+settings to the AndroMDA configuration).</description>
+        </parameter>
+        <parameter>
+          <name>skip</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Set this to &apos;true&apos; to bypass cartridge tests entirely. Its use is NOT RECOMMENDED, but quite convenient on occasion.</description>
+        </parameter>
+        <parameter>
+          <name>skipProcessing</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Whether or not processing should be skipped (this is if you want to completely skip code generation, i.e. if
+code is already generated and you are creating the site from already generated source code).</description>
+        </parameter>
+        <parameter>
+          <name>skipTests</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Set this to &apos;true&apos; to skip running tests, but still compile them. Its use is NOT RECOMMENDED, but quite convenient on occasion.</description>
+        </parameter>
+        <parameter>
+          <name>testFailureIgnore</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Set this to true to ignore a failure during testing. Its use is NOT RECOMMENDED, but quite convenient on occasion.</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <configurationUri implementation="java.lang.String">${configuration.uri}</configurationUri>
+        <project implementation="org.apache.maven.project.MavenProject">${project}</project>
+        <propertyFiles implementation="java.util.List">${project.build.filters}</propertyFiles>
+        <settings implementation="org.apache.maven.settings.Settings">${settings}</settings>
+        <skip implementation="boolean">${maven.test.skip}</skip>
+        <skipProcessing implementation="boolean">${andromdapp.run.skip}</skipProcessing>
+        <skipTests implementation="boolean">${skipTests}</skipTests>
+        <testFailureIgnore implementation="boolean" default-value="false">${maven.test.failure.ignore}</testFailureIgnore>
+      </configuration>
+    </mojo>
+  </mojos>
+  <dependencies>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <type>jar</type>
+      <version>2.4</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <type>jar</type>
+      <version>2.6</version>
+    </dependency>
+    <dependency>
+      <groupId>org.javassist</groupId>
+      <artifactId>javassist</artifactId>
+      <type>jar</type>
+      <version>3.18.2-GA</version>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <type>jar</type>
+      <version>1.2.17</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-core</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-file</artifactId>
+      <type>jar</type>
+      <version>1.0-beta-6</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-plugin-parameter-documenter</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-http-lightweight</artifactId>
+      <type>jar</type>
+      <version>1.0-beta-6</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-http-shared</artifactId>
+      <type>jar</type>
+      <version>1.0-beta-6</version>
+    </dependency>
+    <dependency>
+      <groupId>nekohtml</groupId>
+      <artifactId>xercesMinimal</artifactId>
+      <type>jar</type>
+      <version>1.9.6.2</version>
+    </dependency>
+    <dependency>
+      <groupId>nekohtml</groupId>
+      <artifactId>nekohtml</artifactId>
+      <type>jar</type>
+      <version>1.9.6.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-http</artifactId>
+      <type>jar</type>
+      <version>1.0-beta-6</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-webdav-jackrabbit</artifactId>
+      <type>jar</type>
+      <version>1.0-beta-6</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.jackrabbit</groupId>
+      <artifactId>jackrabbit-webdav</artifactId>
+      <type>jar</type>
+      <version>1.5.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.jackrabbit</groupId>
+      <artifactId>jackrabbit-jcr-commons</artifactId>
+      <type>jar</type>
+      <version>1.5.0</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-httpclient</groupId>
+      <artifactId>commons-httpclient</artifactId>
+      <type>jar</type>
+      <version>3.0</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <type>jar</type>
+      <version>1.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-nop</artifactId>
+      <type>jar</type>
+      <version>1.5.3</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-jdk14</artifactId>
+      <type>jar</type>
+      <version>1.5.6</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <type>jar</type>
+      <version>1.7.7</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.reporting</groupId>
+      <artifactId>maven-reporting-api</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.doxia</groupId>
+      <artifactId>doxia-sink-api</artifactId>
+      <type>jar</type>
+      <version>1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.doxia</groupId>
+      <artifactId>doxia-logging-api</artifactId>
+      <type>jar</type>
+      <version>1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-profile</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-provider-api</artifactId>
+      <type>jar</type>
+      <version>1.0-beta-6</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-repository-metadata</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-error-diagnostics</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-cli</groupId>
+      <artifactId>commons-cli</artifactId>
+      <type>jar</type>
+      <version>1.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-ssh-external</artifactId>
+      <type>jar</type>
+      <version>1.0-beta-6</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-ssh-common</artifactId>
+      <type>jar</type>
+      <version>1.0-beta-6</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-plugin-descriptor</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-interactivity-api</artifactId>
+      <type>jar</type>
+      <version>1.0-alpha-6</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-component-api</artifactId>
+      <type>jar</type>
+      <version>1.0-alpha-16</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-artifact-manager</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>backport-util-concurrent</groupId>
+      <artifactId>backport-util-concurrent</artifactId>
+      <type>jar</type>
+      <version>3.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-monitor</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-ssh</artifactId>
+      <type>jar</type>
+      <version>1.0-beta-6</version>
+    </dependency>
+    <dependency>
+      <groupId>com.jcraft</groupId>
+      <artifactId>jsch</artifactId>
+      <type>jar</type>
+      <version>0.1.38</version>
+    </dependency>
+    <dependency>
+      <groupId>classworlds</groupId>
+      <artifactId>classworlds</artifactId>
+      <type>jar</type>
+      <version>1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.sonatype.plexus</groupId>
+      <artifactId>plexus-sec-dispatcher</artifactId>
+      <type>jar</type>
+      <version>1.3</version>
+    </dependency>
+    <dependency>
+      <groupId>org.sonatype.plexus</groupId>
+      <artifactId>plexus-cipher</artifactId>
+      <type>jar</type>
+      <version>1.4</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.shared</groupId>
+      <artifactId>maven-filtering</artifactId>
+      <type>jar</type>
+      <version>1.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.shared</groupId>
+      <artifactId>maven-shared-utils</artifactId>
+      <type>jar</type>
+      <version>0.3</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.findbugs</groupId>
+      <artifactId>jsr305</artifactId>
+      <type>jar</type>
+      <version>2.0.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-interpolation</artifactId>
+      <type>jar</type>
+      <version>1.19</version>
+    </dependency>
+    <dependency>
+      <groupId>org.sonatype.plexus</groupId>
+      <artifactId>plexus-build-api</artifactId>
+      <type>jar</type>
+      <version>0.0.4</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-artifact</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-project</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-plugin-registry</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-settings</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-plugin-api</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-model</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-container-default</artifactId>
+      <type>jar</type>
+      <version>1.5.5</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-classworlds</artifactId>
+      <type>jar</type>
+      <version>2.2.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.xbean</groupId>
+      <artifactId>xbean-reflect</artifactId>
+      <type>jar</type>
+      <version>3.4</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging-api</artifactId>
+      <type>jar</type>
+      <version>1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.collections</groupId>
+      <artifactId>google-collections</artifactId>
+      <type>jar</type>
+      <version>1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+      <type>jar</type>
+      <version>3.0.18</version>
+    </dependency>
+    <dependency>
+      <groupId>org.andromda</groupId>
+      <artifactId>andromda-core</artifactId>
+      <type>jar</type>
+      <version>3.5-20140919.204818-9</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+      <type>jar</type>
+      <version>3.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-digester</groupId>
+      <artifactId>commons-digester</artifactId>
+      <type>jar</type>
+      <version>2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-beanutils</groupId>
+      <artifactId>commons-beanutils</artifactId>
+      <type>jar</type>
+      <version>1.9.2</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <type>jar</type>
+      <version>1.2</version>
+    </dependency>
+    <dependency>
+      <groupId>de.plushnikov</groupId>
+      <artifactId>doctor-jim</artifactId>
+      <type>jar</type>
+      <version>1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.andromda.andromdapp</groupId>
+      <artifactId>andromda-andromdapp-core</artifactId>
+      <type>jar</type>
+      <version>3.5-20140919.211243-9</version>
+    </dependency>
+    <dependency>
+      <groupId>org.andromda.andromdapp.projects</groupId>
+      <artifactId>andromda-andromdapp-project-j2ee-maven2</artifactId>
+      <type>jar</type>
+      <version>3.5-20140919.211251-10</version>
+    </dependency>
+    <dependency>
+      <groupId>org.andromda.andromdapp.projects</groupId>
+      <artifactId>andromda-andromdapp-project-richclient-ant</artifactId>
+      <type>jar</type>
+      <version>3.5-20140919.211258-9</version>
+    </dependency>
+    <dependency>
+      <groupId>org.andromda.templateengines</groupId>
+      <artifactId>andromda-templateengine-velocity</artifactId>
+      <type>jar</type>
+      <version>3.5-20140919.204940-8</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.velocity</groupId>
+      <artifactId>velocity</artifactId>
+      <type>jar</type>
+      <version>1.6.4</version>
+    </dependency>
+    <dependency>
+      <groupId>oro</groupId>
+      <artifactId>oro</artifactId>
+      <type>jar</type>
+      <version>2.0.8</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.velocity</groupId>
+      <artifactId>velocity-tools</artifactId>
+      <type>jar</type>
+      <version>2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-chain</groupId>
+      <artifactId>commons-chain</artifactId>
+      <type>jar</type>
+      <version>1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-validator</groupId>
+      <artifactId>commons-validator</artifactId>
+      <type>jar</type>
+      <version>1.4.0</version>
+    </dependency>
+    <dependency>
+      <groupId>dom4j</groupId>
+      <artifactId>dom4j</artifactId>
+      <type>jar</type>
+      <version>1.6.1</version>
+    </dependency>
+    <dependency>
+      <groupId>xml-apis</groupId>
+      <artifactId>xml-apis</artifactId>
+      <type>jar</type>
+      <version>1.4.01</version>
+    </dependency>
+    <dependency>
+      <groupId>sslext</groupId>
+      <artifactId>sslext</artifactId>
+      <type>jar</type>
+      <version>1.2-0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.struts</groupId>
+      <artifactId>struts-core</artifactId>
+      <type>jar</type>
+      <version>1.3.8</version>
+    </dependency>
+    <dependency>
+      <groupId>antlr</groupId>
+      <artifactId>antlr</artifactId>
+      <type>jar</type>
+      <version>2.7.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.struts</groupId>
+      <artifactId>struts-taglib</artifactId>
+      <type>jar</type>
+      <version>1.3.8</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.struts</groupId>
+      <artifactId>struts-tiles</artifactId>
+      <type>jar</type>
+      <version>1.3.8</version>
+    </dependency>
+  </dependencies>
+</plugin>

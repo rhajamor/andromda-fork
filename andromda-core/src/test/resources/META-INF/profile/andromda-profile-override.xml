@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<profile>
+    <elements>
+        <elementGroup name="Stereotypes">
+            <element name="TEST_FROM_OVERRIDE">
+                <value>TestFromOverride</value>
+            </element>
+            <element name="ENTITY">
+                <value>New Entity</value>
+            </element>
+        </elementGroup>
+    </elements>
+</profile>
